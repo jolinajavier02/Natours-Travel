@@ -583,6 +583,128 @@ body {
     font-weight: bold;
 }
 
+/* Detailed Booking Process Styles */
+.booking-process-detailed,
+.visa-process-detailed {
+    background: #f0f7f4;
+    padding: 2.5rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.booking-process-detailed>h3,
+.visa-process-detailed>h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 2rem;
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+}
+
+.process-step {
+    background-color: var(--white);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.process-step:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(9, 113, 61, 0.15);
+}
+
+.process-step h4 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.process-step p {
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+}
+
+.process-step ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0.75rem;
+}
+
+.process-step ul li {
+    position: relative;
+    padding-left: 1.8rem;
+    margin-bottom: 0.6rem;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.process-step ul li::before {
+    content: '✓';
+    color: var(--primary-color);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.process-step em {
+    color: #555;
+    font-style: italic;
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* Nested lists styling */
+.process-step ul ul {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.process-step ul ul li::before {
+    content: '•';
+    font-size: 1rem;
+}
+
+/* Important note styling within process steps */
+.process-step .important-note {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    border-radius: 5px;
+    color: #856404;
+    font-weight: 500;
+}
+
+/* Responsive adjustments for booking process */
+@media (max-width: 768px) {
+
+    .booking-process-detailed,
+    .visa-process-detailed {
+        padding: 1.5rem;
+    }
+
+    .process-step {
+        padding: 1.25rem 1.5rem;
+    }
+
+    .process-step h4 {
+        font-size: 1.1rem;
+    }
+
+    .booking-process-detailed>h3,
+    .visa-process-detailed>h3 {
+        font-size: 1.5rem;
+    }
+}
+
 @media (max-width: 768px) {
     .footer-content {
         grid-template-columns: 1fr;
