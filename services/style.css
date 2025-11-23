@@ -759,33 +759,27 @@ body {
 }
 
 /* Grid layout for horizontal arrangement */
-@media (min-width: 992px) {
+/* Flex layout for neat arrangement */
+@media (min-width: 768px) {
 
     .booking-process-detailed,
     .visa-process-detailed {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 1.5rem;
-        align-items: start;
     }
 
     .process-step {
+        flex: 1 1 300px;
+        max-width: 350px;
         margin-bottom: 0;
     }
-}
 
-@media (min-width: 768px) and (max-width: 991px) {
-
-    .booking-process-detailed,
-    .visa-process-detailed {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        align-items: start;
-    }
-
-    .process-step {
-        margin-bottom: 0;
+    .booking-process-detailed>h3,
+    .visa-process-detailed>h3 {
+        width: 100%;
+        flex-basis: 100%;
     }
 }
 
