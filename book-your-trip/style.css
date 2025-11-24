@@ -206,7 +206,7 @@ body {
 .flow-timeline {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 4rem;
@@ -246,6 +246,9 @@ body {
     font-size: 2rem;
     color: var(--primary-color);
     font-weight: bold;
+    height: 60px;
+    display: flex;
+    align-items: center;
 }
 
 /* Flow Steps Grid */
@@ -319,6 +322,7 @@ body {
 @media (max-width: 768px) {
     .flow-timeline {
         flex-direction: column;
+        align-items: center;
     }
 
     .flow-arrow {
