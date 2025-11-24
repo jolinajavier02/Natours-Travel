@@ -64,22 +64,65 @@ document.addEventListener('DOMContentLoaded', function () {
     const bookingForm = document.getElementById('bookingForm');
     if (bookingForm) {
         bookingForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+            // Check if Formspree is configured
+            const formAction = this.getAttribute('action');
 
-            // Collect form data
-            const formData = new FormData(this);
-            const formObject = {};
-            formData.forEach((value, key) => {
-                formObject[key] = value;
-            });
+            if (!formAction || formAction.includes('YOUR_FORM_ID')) {
+                // Formspree not configured - use WhatsApp fallback
+                e.preventDefault();
 
-            console.log('Form submitted with data:', formObject);
+                // Collect form data
+                const formData = new FormData(this);
+                const formObject = {};
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
+                });
 
-            // Show success message (you can customize this)
-            alert('Thank you for your booking inquiry! We will contact you shortly via email or phone to confirm your booking details and provide a quotation.');
+                // Create WhatsApp message
+                let message = `*New Booking Inquiry*\n\n`;
+                message += `*Personal Information:*\n`;
+                message += `Name: ${formObject.firstName} ${formObject.middleName || ''} ${formObject.lastName}\n`;
+                message += `DOB: ${formObject.dateOfBirth}\n`;
+                message += `Gender: ${formObject.gender}\n`;
+                message += `Email: ${formObject.email}\n`;
+                message += `Phone: ${formObject.phone}\n`;
+                if (formObject.alternateContact) message += `Alt Contact: ${formObject.alternateContact}\n`;
 
-            // Optionally reset the form
-            // this.reset();
+                message += `\n*Trip Details:*\n`;
+                message += `Service: ${formObject.serviceType}\n`;
+                message += `Destination: ${formObject.destination}\n`;
+                message += `Start Date: ${formObject.travelDateStart}\n`;
+                message += `End Date: ${formObject.travelDateEnd}\n`;
+                message += `Travelers: ${formObject.numAdults} Adults, ${formObject.numChildren} Children\n`;
+
+                if (formObject.additionalDetails) {
+                    message += `\n*Additional Details:*\n${formObject.additionalDetails}\n`;
+                }
+
+                // Encode message for WhatsApp
+                const whatsappMessage = encodeURIComponent(message);
+                const whatsappURL = `https://wa.me/639369418559?text=${whatsappMessage}`;
+
+                // Open WhatsApp
+                window.open(whatsappURL, '_blank');
+
+                // Show confirmation
+                alert('Redirecting to WhatsApp to send your inquiry. Please click Send in WhatsApp to complete your booking request.');
+            } else {
+                // Formspree is configured - let it submit normally
+                // Show loading message
+                const submitBtn = this.querySelector('.btn-submit');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+
+                // Form will submit to Formspree
+                // On success, Formspree will show a thank you page
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 3000);
+            }
         });
     }
 
