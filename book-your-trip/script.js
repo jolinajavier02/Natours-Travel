@@ -82,4 +82,67 @@ document.addEventListener('DOMContentLoaded', function () {
             // this.reset();
         });
     }
+
+    // Travelers Dropdown Logic
+    const travelersInput = document.getElementById('travelersInput');
+    const travelersDropdown = document.getElementById('travelersDropdown');
+    const closeTravelersBtn = document.getElementById('closeTravelers');
+    const travelersSelector = document.getElementById('travelersSelector');
+
+    // Toggle dropdown
+    if (travelersInput) {
+        travelersInput.addEventListener('click', function (e) {
+            e.stopPropagation();
+            travelersDropdown.classList.toggle('active');
+        });
+    }
+
+    // Close on 'Done' button
+    if (closeTravelersBtn) {
+        closeTravelersBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            travelersDropdown.classList.remove('active');
+        });
+    }
+
+    // Close when clicking outside
+    document.addEventListener('click', function (e) {
+        if (travelersSelector && !travelersSelector.contains(e.target)) {
+            travelersDropdown.classList.remove('active');
+        }
+    });
 });
+
+// Global function for traveler updates
+window.updateTraveler = function (type, change) {
+    const adultsCountSpan = document.getElementById('adultsCount');
+    const childrenCountSpan = document.getElementById('childrenCount');
+    const numAdultsInput = document.getElementById('numAdults');
+    const numChildrenInput = document.getElementById('numChildren');
+    const travelersInput = document.getElementById('travelersInput');
+
+    let currentAdults = parseInt(adultsCountSpan.innerText);
+    let currentChildren = parseInt(childrenCountSpan.innerText);
+
+    if (type === 'adults') {
+        currentAdults += change;
+        if (currentAdults < 1) currentAdults = 1; // Minimum 1 adult
+        adultsCountSpan.innerText = currentAdults;
+        numAdultsInput.value = currentAdults;
+    } else if (type === 'children') {
+        currentChildren += change;
+        if (currentChildren < 0) currentChildren = 0; // Minimum 0 children
+        childrenCountSpan.innerText = currentChildren;
+        numChildrenInput.value = currentChildren;
+    }
+
+    // Update summary text
+    const adultText = currentAdults === 1 ? '1 Adult' : `${currentAdults} Adults`;
+    const childText = currentChildren === 1 ? '1 Child' : `${currentChildren} Children`;
+
+    if (currentChildren > 0) {
+        travelersInput.value = `${adultText}, ${childText}`;
+    } else {
+        travelersInput.value = adultText;
+    }
+};
