@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             // Send email using EmailJS
-            emailjs.send('service_wwjqu3l', 'template_booking', templateParams)
+            // Explicitly passing public key 'r3zhCF9T2VEWag5c4' to ensure it's picked up
+            emailjs.send('service_wwjqu3l', 'template_booking', templateParams, 'r3zhCF9T2VEWag5c4')
                 .then(function (response) {
                     console.log('SUCCESS!', response.status, response.text);
 
@@ -145,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     submitBtn.disabled = false;
 
                     // Show error and offer WhatsApp fallback
-                    if (confirm('There was an error sending your inquiry via email. Would you like to send it via WhatsApp instead?')) {
+                    // Display the actual error text to help debugging
+                    const errorMessage = error.text || 'Unknown error';
+                    if (confirm(`There was an error sending your inquiry via email: ${errorMessage}. \n\nWould you like to send it via WhatsApp instead?`)) {
                         // Create WhatsApp message
                         let message = `*New Booking Inquiry*\n\n`;
                         message += `*Personal Information:*\n`;
