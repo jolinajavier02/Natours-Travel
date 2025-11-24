@@ -280,37 +280,46 @@
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group">
-                                    <label for="numAdults">Number of Adults <span class="required">*</span></label>
-                                    <select id="numAdults" name="numAdults" required>
-                                        <option value="" disabled selected>Select adults</option>
-                                        <option value="1">1 Adult</option>
-                                        <option value="2">2 Adults</option>
-                                        <option value="3">3 Adults</option>
-                                        <option value="4">4 Adults</option>
-                                        <option value="5">5 Adults</option>
-                                        <option value="6">6 Adults</option>
-                                        <option value="7">7 Adults</option>
-                                        <option value="8">8 Adults</option>
-                                        <option value="9">9 Adults</option>
-                                        <option value="10+">10+ Adults</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="numChildren">Number of Children</label>
-                                    <select id="numChildren" name="numChildren">
-                                        <option value="0" selected>No Children</option>
-                                        <option value="1">1 Child</option>
-                                        <option value="2">2 Children</option>
-                                        <option value="3">3 Children</option>
-                                        <option value="4">4 Children</option>
-                                        <option value="5">5 Children</option>
-                                        <option value="6">6 Children</option>
-                                        <option value="7">7 Children</option>
-                                        <option value="8">8 Children</option>
-                                        <option value="9">9 Children</option>
-                                        <option value="10+">10+ Children</option>
-                                    </select>
+                                <div class="form-group" style="position: relative;">
+                                    <label>Travelers <span class="required">*</span></label>
+                                    <div class="travelers-selector" id="travelersSelector">
+                                        <input type="text" id="travelersInput" readonly value="1 Adult, 0 Children"
+                                            style="cursor: pointer; background-color: #fff;">
+                                        <div class="travelers-dropdown" id="travelersDropdown">
+                                            <div class="counter-row">
+                                                <div class="counter-label">
+                                                    <span>Adults</span>
+                                                    <small>Age 12+</small>
+                                                </div>
+                                                <div class="counter-controls">
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="updateTraveler('adults', -1)">-</button>
+                                                    <span id="adultsCount">1</span>
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="updateTraveler('adults', 1)">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="counter-row">
+                                                <div class="counter-label">
+                                                    <span>Children</span>
+                                                    <small>Age 2-11</small>
+                                                </div>
+                                                <div class="counter-controls">
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="updateTraveler('children', -1)">-</button>
+                                                    <span id="childrenCount">0</span>
+                                                    <button type="button" class="counter-btn"
+                                                        onclick="updateTraveler('children', 1)">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown-footer">
+                                                <button type="button" class="btn-done" id="closeTravelers">Done</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Hidden inputs for form submission -->
+                                    <input type="hidden" id="numAdults" name="numAdults" value="1">
+                                    <input type="hidden" id="numChildren" name="numChildren" value="0">
                                 </div>
                             </div>
 

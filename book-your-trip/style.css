@@ -700,3 +700,111 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+/* Travelers Dropdown Styles */
+.travelers-selector {
+    position: relative;
+}
+
+.travelers-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 1rem;
+    z-index: 100;
+    margin-top: 0.5rem;
+}
+
+.travelers-dropdown.active {
+    display: block;
+}
+
+.counter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.counter-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.counter-label {
+    display: flex;
+    flex-direction: column;
+}
+
+.counter-label span {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.counter-label small {
+    color: var(--text-light);
+    font-size: 0.8rem;
+}
+
+.counter-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.counter-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--primary-color);
+    background: #fff;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.counter-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.counter-btn:active {
+    transform: scale(0.95);
+}
+
+.counter-controls span {
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+.dropdown-footer {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+.btn-done {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-done:hover {
+    background: var(--primary-dark);
+}
