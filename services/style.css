@@ -240,31 +240,18 @@ body {
     }
 
     /* Ensure full width for the booking process when it wraps */
-    .service-section:nth-child(even) .service-body .booking-process-detailed {
-        /* Reset direction for the full-width item so it doesn't look reversed */
-        /* Actually, if the container is row-reverse, the items are 1, 2, 3 reversed. 
-            If I have Slider, Details, Booking.
-            Row reverse: Booking, Details, Slider.
-            That's not what we want. We want Slider | Details, then Booking below.
-            
-            If I use flex-wrap with row-reverse:
-            It will fill from right to left.
-            Row 1: Slider (Right), Details (Left) ?? No.
-            
-            If flex-direction is row-reverse:
-            Items are laid out right-to-left.
-            1. Slider
-            2. Details
-            3. Booking
-            
-            Visual:
-            [Booking] (if it wraps to top?) No, wrap flows down.
-            
-            Row 1: [Details] [Slider] (Right aligned)
-            Row 2: [Booking]
-            
-            This seems okay.
-         */
+    .service-section .service-body .booking-process-detailed,
+    .service-section .service-body .visa-process-detailed {
+        flex: 0 0 100%;
+        width: 100%;
+        margin-top: 2rem;
+    }
+
+    /* Reset direction for the full-width item so it doesn't look reversed */
+    .service-section:nth-child(even) .service-body .booking-process-detailed,
+    .service-section:nth-child(even) .service-body .visa-process-detailed {
+        direction: ltr;
+        /* Ensure content inside flows normally */
     }
 }
 
@@ -674,186 +661,151 @@ body {
     font-weight: bold;
 }
 
-/* Detailed Booking Process Styles */
+/* Detailed Booking Process Styles (Refactored to match Book Your Trip) */
 .booking-process-detailed,
 .visa-process-detailed {
-    background: #f0f7f4;
-    padding: 2.5rem;
+    background: #fff;
+    /* Changed to white to match book-your-trip style or keep light bg? Book your trip uses white cards on white/light bg */
+    padding: 2.5rem 0;
+    /* Adjusted padding */
     border-radius: 15px;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); Removed to match flow style which has cards */
 }
 
 .booking-process-detailed>h3,
 .visa-process-detailed>h3 {
     font-size: 2rem;
     color: var(--primary-color);
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
     text-align: center;
     border-left: none;
     padding-left: 0;
     grid-column: 1 / -1;
 }
 
-.process-step {
-    background-color: var(--white);
-    border-left: 4px solid var(--primary-color);
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    height: 100%;
+/* Horizontal Flow Timeline */
+.flow-timeline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 4rem;
+    padding: 2rem 0;
+}
+
+.flow-step-indicator {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.process-step:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(9, 113, 61, 0.15);
+.step-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(9, 113, 61, 0.3);
 }
 
-/* How to Book Section Grid */
-.how-to-book-section .process-steps-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-@media (max-width: 768px) {
-    .how-to-book-section .process-steps-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-.process-step p {
-    color: var(--text-light);
-    margin-bottom: 0.75rem;
-    line-height: 1.7;
-    font-size: 0.95rem;
-}
-
-.process-step ul {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 0.75rem;
-    flex-grow: 1;
-}
-
-.process-step ul li {
-    position: relative;
-    padding-left: 1.8rem;
-    margin-bottom: 0.6rem;
-    color: var(--text-light);
-    line-height: 1.6;
+.step-label {
     font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-align: center;
+    max-width: 120px;
 }
 
-.process-step ul li::before {
-    content: '✓';
+.flow-arrow {
+    font-size: 2rem;
     color: var(--primary-color);
-    position: absolute;
-    left: 0;
     font-weight: bold;
-    font-size: 1rem;
 }
 
-.process-step em {
-    color: #555;
-    font-style: italic;
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
+/* Flow Steps Grid */
+.flow-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
 }
 
-/* Nested lists styling */
-.process-step ul ul {
+.flow-step-card {
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    border-radius: 15px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+    height: 100%;
+    /* Ensure equal height */
+}
+
+.flow-step-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(9, 113, 61, 0.15);
+    transform: translateY(-5px);
+}
+
+.flow-step-card .step-number {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.flow-step-card h4 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
     margin-top: 0.5rem;
+}
+
+.flow-step-card p {
+    color: var(--text-color);
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+}
+
+.flow-step-card ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.flow-step-card ul li {
+    color: var(--text-light);
     margin-bottom: 0.5rem;
 }
 
-.process-step ul ul li::before {
-    content: '•';
-    font-size: 0.9rem;
-}
-
-.process-step ul ul li {
-    font-size: 0.85rem;
-}
-
-/* Important note styling within process steps */
-.process-step .important-note {
-    background-color: #fff3cd;
-    border-left: 4px solid #ffc107;
-    padding: 0.75rem 1rem;
-    margin: 1rem 0;
-    border-radius: 5px;
-    color: #856404;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-/* Grid layout for horizontal arrangement */
-/* Flex layout for neat arrangement */
-@media (min-width: 768px) {
-
-    .booking-process-detailed,
-    .visa-process-detailed {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1.5rem;
-    }
-
-    .process-step {
-        flex: 1 1 300px;
-        max-width: 350px;
-        margin-bottom: 0;
-    }
-
-    .booking-process-detailed>h3,
-    .visa-process-detailed>h3 {
-        width: 100%;
-        flex-basis: 100%;
-    }
-}
-
-/* Responsive adjustments for booking process */
-@media (max-width: 768px) {
-
-    .booking-process-detailed,
-    .visa-process-detailed {
-        padding: 1.5rem;
-    }
-
-    .process-step {
-        padding: 1.25rem;
-    }
-
-    .process-step h4 {
-        font-size: 1.1rem;
-    }
-
-    .booking-process-detailed>h3,
-    .visa-process-detailed>h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
+.step-detail {
+    font-style: italic;
+    color: var(--text-light);
+    font-size: 0.95rem;
 }
 
 @media (max-width: 768px) {
-    .footer-content {
-        grid-template-columns: 1fr;
+    .flow-timeline {
+        flex-direction: column;
     }
 
-    .hero-section {
-        min-height: 600px;
-        padding: 100px 20px 80px;
-    }
-
-    .hero-title {
-        font-size: 2.5rem;
+    .flow-arrow {
+        transform: rotate(90deg);
     }
 }
