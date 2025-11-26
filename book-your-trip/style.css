@@ -254,8 +254,8 @@ body {
 /* Flow Steps Grid */
 .flow-steps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1.5rem;
     margin-top: 3rem;
 }
 
@@ -700,6 +700,7 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+
 /* Travelers Dropdown Styles */
 .travelers-selector {
     position: relative;
