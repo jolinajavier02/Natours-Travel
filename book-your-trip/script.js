@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Send email using EmailJS
             // Explicitly passing public key 'r3zhCF9T2VEWag5c4' to ensure it's picked up
-            emailjs.send('service_wwjqu3l', 'template_booking', templateParams, 'r3zhCF9T2VEWag5c4')
+            emailjs.send('service_wwjqu3l', 'template_v84hwer', templateParams, 'r3zhCF9T2VEWag5c4')
                 .then(function (response) {
                     console.log('SUCCESS!', response.status, response.text);
 
