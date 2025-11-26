@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking - Natours Travel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../book-your-trip/style.css">
+    <link rel="icon" type="image/png" href="../home/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init({
+                publicKey: "r3zhCF9T2VEWag5c4",
+            });
+        })();
+    </script>
+
+    <style>
+        .confirmation-container {
+            max-width: 900px;
+            margin: 100px auto 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .confirmation-header {
+            background: linear-gradient(135deg, #09713D, #0a8547);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .confirmation-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            background: white;
+            color: #09713D;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .confirmation-content {
+            padding: 2rem;
+        }
+
+        .info-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .info-section h2 {
+            color: #09713D;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .info-item .label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-item .value {
+            font-size: 1.05rem;
+            color: #000;
+        }
+
+        .pricing-box {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .pricing-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .pricing-row:last-child {
+            border-bottom: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #09713D;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #09713D;
+        }
+
+        .payment-section {
+            background: #fff3cd;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .payment-method {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .payment-method h3 {
+            color: #09713D;
+            margin-bottom: 0.8rem;
+        }
+
+        .upload-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .upload-section h3 {
+            color: #09713D;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-wrapper {
+            border: 2px dashed #09713D;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-wrapper:hover {
+            background: #f0f9f4;
+        }
+
+        .file-upload-wrapper.has-file {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1.2rem;
+            background: #09713D;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s;
+        }
+
+        .submit-button:hover {
+            background: #0a8547;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(9, 113, 61, 0.3);
+        }
+
+        .submit-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-button {
+                position: static;
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../book-your-trip/index.html" class="back-button">
+        ← Back to Form
+    </a>
+
+    <div class="confirmation-container">
+        <div class="confirmation-header">
+            <h1>📋 Confirm Your Booking</h1>
+            <p>Please review your details and proceed with payment</p>
+        </div>
+
+        <div class="confirmation-content">
+            <!-- Personal Information -->
+            <div class="info-section">
+                <h2>Personal Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Full Name</span>
+                        <span class="value" id="fullName"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Date of Birth</span>
+                        <span class="value" id="dob"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Gender</span>
+                        <span class="value" id="gender"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Email</span>
+                        <span class="value" id="email"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Phone</span>
+                        <span class="value" id="phone"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Alternate Contact</span>
+                        <span class="value" id="altContact"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trip Details -->
+            <div class="info-section">
+                <h2>Trip Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Service Type</span>
+                        <span class="value" id="serviceType"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Destination</span>
+                        <span class="value" id="destination"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Travel Dates</span>
+                        <span class="value" id="travelDates"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Travelers</span>
+                        <span class="value" id="travelers"></span>
+                    </div>
+                </div>
+                <div id="serviceSpecificDetails" style="margin-top: 1rem;"></div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="info-section">
+                <h2>Payment Details</h2>
+                <div class="pricing-box">
+                    <div class="pricing-row">
+                        <span>Service Fee</span>
+                        <span id="serviceFee">₱5,000.00</span>
+                    </div>
+                    <div class="pricing-row">
+                        <span>Processing Fee</span>
+                        <span>₱500.00</span>
+                    </div>
+                    <div class="pricing-row">
+                        <span>TOTAL AMOUNT</span>
+                        <span id="totalAmount">₱5,500.00</span>
+                    </div>
+                </div>
+                <p style="color: #666; font-size: 0.9rem; margin-top: 1rem;">
+                    <strong>Note:</strong> This is an initial deposit. Final quotation will be sent after verification.
+                </p>
+            </div>
+
+            <!-- Payment Instructions -->
+            <div class="payment-section">
+                <h2>💳 Payment Instructions</h2>
+                <p style="margin-bottom: 1rem;">Please complete your payment using any of the following methods:</p>
+
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <h3>GCash</h3>
+                        <p><strong>Number:</strong> 09369418559</p>
+                        <p><strong>Name:</strong> Natours Travel</p>
+                    </div>
+                    <div class="payment-method">
+                        <h3>Maya</h3>
+                        <p><strong>Number:</strong> 09369418559</p>
+                        <p><strong>Name:</strong> Natours Travel</p>
+                    </div>
+                    <div class="payment-method">
+                        <h3>Bank Transfer</h3>
+                        <p><strong>Bank:</strong> BDO</p>
+                        <p><strong>Account:</strong> Natours Travel</p>
+                        <p><strong>Number:</strong> 1234567890</p>
+                    </div>
+                </div>
+
+                <!-- Upload Payment Proof -->
+                <div class="upload-section">
+                    <h3>Payment Details (Required) *</h3>
+
+                    <!-- Payment Method Selection -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Payment Method Used
+                            *</label>
+                        <select id="paymentMethod" required
+                            style="width: 100%; padding: 0.8rem; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                            <option value="">Select payment method</option>
+                            <option value="GCash">GCash</option>
+                            <option value="Maya">Maya</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                        </select>
+                    </div>
+
+                    <!-- Reference Number -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Reference Number
+                            *</label>
+                        <input type="text" id="referenceNumber" required placeholder="e.g., 1234567890123"
+                            style="width: 100%; padding: 0.8rem; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                        <small style="color: #666; font-size: 0.85rem;">Enter the transaction/reference number from your
+                            receipt</small>
+                    </div>
+
+                    <!-- Account Name -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Account Name Used
+                            *</label>
+                        <input type="text" id="accountName" required placeholder="e.g., Juan Dela Cruz"
+                            style="width: 100%; padding: 0.8rem; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 1rem;">
+                        <small style="color: #666; font-size: 0.85rem;">Enter the name of the account you paid
+                            from</small>
+                    </div>
+
+                    <h3 style="margin-top: 2rem;">Upload Payment Proof (Screenshot/Photo) *</h3>
+                    <p style="margin-bottom: 1rem; color: #666;">Please upload a screenshot or photo of your payment
+                        receipt</p>
+
+                    <div class="file-upload-wrapper" id="fileUploadWrapper">
+                        <input type="file" id="paymentProof" accept="image/*" style="display: none;" required>
+                        <div id="uploadPlaceholder">
+                            <p style="font-size: 3rem; margin: 0;">📤</p>
+                            <p style="font-weight: 600; margin: 0.5rem 0;">Click to upload payment proof</p>
+                            <p style="color: #666; font-size: 0.9rem;">Accepted: JPG, PNG (Max 5MB)</p>
+                        </div>
+                        <div id="uploadSuccess" style="display: none;">
+                            <p style="font-size: 3rem; margin: 0;">✅</p>
+                            <p style="font-weight: 600; margin: 0.5rem 0; color: #28a745;">File uploaded successfully!
+                            </p>
+                            <p id="fileName" style="color: #666; font-size: 0.9rem;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" id="submitBooking" class="submit-button" disabled>
+                Submit Booking & Payment Proof
+            </button>
+        </div>
+    </div>
+
+    <script src="confirm-script.js"></script>
+</body>
+
+</html>

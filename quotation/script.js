@@ -161,15 +161,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function sendPaymentNotification(paymentData) {
-        // TODO: Integrate with EmailJS to send notification to admin
-        // For now, just log to console
-        console.log('Payment proof uploaded:', paymentData);
+        // Get quotation data to include in email
+        const quotations = JSON.parse(localStorage.getItem('quotations') || '{}');
+        const quotation = quotations[quotationId];
 
-        // You can add EmailJS integration here similar to the booking form
-        // emailjs.send('service_id', 'template_id', {
-        //     quotation_id: paymentData.quotationId,
-        //     file_name: paymentData.fileName,
-        //     uploaded_at: paymentData.uploadedAt
-        // });
+        if (!quotation) {
+            console.error('Quotation not found for payment notification');
+            return;
+        }
+
+        // Prepare email parameters
+        const emailParams = {
+            quotation_id: quotationId,
+            customer_name: quotation.customerName,
+            customer_email: quotation.customerEmail,
+            customer_phone: quotation.customerPhone,
+            service_type: formatServiceType(quotation.serviceType),
+            destination: quotation.destination,
+            travel_dates: quotation.travelDates,
+            total_amount: `₱${quotation.total.toFixed(2)}`,
+            file_name: paymentData.fileName,
+            file_size: `${(paymentData.fileSize / 1024).toFixed(2)} KB`,
+            uploaded_at: new Date(paymentData.uploadedAt).toLocaleString(),
+            payment_method: 'GCash/Maya/Bank Transfer' // Customer will specify in the image
+        };
+
+        // Send email notification to admin
+        emailjs.send('service_wwjqu3l', 'template_payment_proof', emailParams, { publicKey: 'r3zhCF9T2VEWag5c4' })
+            .then(function (response) {
+                console.log('Payment notification sent successfully!', response.status, response.text);
+            }, function (error) {
+                console.error('Failed to send payment notification:', error);
+                // Still show success to customer even if email fails
+            });
     }
 });

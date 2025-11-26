@@ -187,90 +187,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 additionalDetails: details
             };
 
-            // Send TWO emails using EmailJS
-            // Email 1: Customer auto-reply confirmation
-            // Email 2: Admin notification with full booking details
+            // Save booking data to sessionStorage and redirect to confirmation page
+            sessionStorage.setItem('bookingData', JSON.stringify(templateParams));
 
-            const customerEmail = emailjs.send('service_wwjqu3l', 'template_v84hwer', templateParams, { publicKey: 'r3zhCF9T2VEWag5c4' });
-            const adminEmail = emailjs.send('service_wwjqu3l', 'template_3fo9q8j', templateParams, { publicKey: 'r3zhCF9T2VEWag5c4' });
-
-            Promise.all([customerEmail, adminEmail])
-                .then(function (responses) {
-                    console.log('SUCCESS! Both emails sent:', responses);
-
-                    // Reset button
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-
-                    // Show success message
-                    alert('Thank you for your booking inquiry! We have received your request and will contact you shortly via email or phone to confirm your booking details and provide a quotation.');
-
-                    // Reset form
-                    bookingForm.reset();
-
-                    // Hide conditional sections
-                    const flightFields = document.getElementById('flightFields');
-                    const hotelFields = document.getElementById('hotelFields');
-                    const tourFields = document.getElementById('tourFields');
-                    const cruiseFields = document.getElementById('cruiseFields');
-                    const visaFields = document.getElementById('visaFields');
-                    const travelerCountSection = document.getElementById('travelerCountSection');
-
-                    if (flightFields) flightFields.style.display = 'none';
-                    if (hotelFields) hotelFields.style.display = 'none';
-                    if (tourFields) tourFields.style.display = 'none';
-                    if (cruiseFields) cruiseFields.style.display = 'none';
-                    if (visaFields) visaFields.style.display = 'none';
-                    if (travelerCountSection) travelerCountSection.style.display = 'none';
-
-                    // Reset travelers display if it exists (legacy code support)
-                    const travelersInput = document.getElementById('travelersInput');
-                    if (travelersInput) {
-                        travelersInput.value = '1 Adult, 0 Children';
-                    }
-                    const adultsCount = document.getElementById('adultsCount');
-                    const childrenCount = document.getElementById('childrenCount');
-                    if (adultsCount) adultsCount.innerText = '1';
-                    if (childrenCount) childrenCount.innerText = '0';
-
-                }, function (error) {
-                    console.log('FAILED...', error);
-
-                    // Reset button
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-
-                    // Show error and offer WhatsApp fallback
-                    // Display the actual error text to help debugging
-                    const errorMessage = error.text || 'Unknown error';
-                    if (confirm(`There was an error sending your inquiry via email: ${errorMessage}. \n\nWould you like to send it via WhatsApp instead?`)) {
-                        // Create WhatsApp message
-                        let message = `*New Booking Inquiry*\n\n`;
-                        message += `*Personal Information:*\n`;
-                        message += `Name: ${templateParams.firstName} ${templateParams.middleName} ${templateParams.lastName}\n`;
-                        message += `DOB: ${templateParams.dateOfBirth}\n`;
-                        message += `Gender: ${templateParams.gender}\n`;
-                        message += `Email: ${templateParams.email}\n`;
-                        message += `Phone: ${templateParams.phone}\n`;
-                        if (templateParams.alternateContact !== 'N/A') message += `Alt Contact: ${templateParams.alternateContact}\n`;
-
-                        message += `\n*Trip Details:*\n`;
-                        message += `Service: ${templateParams.serviceType}\n`;
-                        message += `Destination: ${templateParams.destination}\n`;
-                        message += `Start Date: ${templateParams.travelDateStart}\n`;
-                        message += `End Date: ${templateParams.travelDateEnd}\n`;
-                        message += `Travelers: ${templateParams.numAdults} Adults, ${templateParams.numChildren} Children\n`;
-
-                        if (templateParams.additionalDetails !== 'None') {
-                            message += `\n*Additional Details:*\n${templateParams.additionalDetails}\n`;
-                        }
-
-                        // Encode and open WhatsApp
-                        const whatsappMessage = encodeURIComponent(message);
-                        const whatsappURL = `https://wa.me/639369418559?text=${whatsappMessage}`;
-                        window.open(whatsappURL, '_blank');
-                    }
-                });
+            // Redirect to confirmation page
+            window.location.href = 'confirm.html';
         });
     }
 
