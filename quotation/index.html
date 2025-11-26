@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation - Natours Travel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="../home/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="quotation-container">
+        <!-- Header -->
+        <div class="quotation-header">
+            <div class="logo-section">
+                <img src="../home/images/logo.png" alt="Natours Travel" class="logo">
+                <div>
+                    <h1>Natours Travel</h1>
+                    <p>Your Journey, Our Passion</p>
+                </div>
+            </div>
+            <div class="quotation-badge">
+                <span>QUOTATION</span>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading quotation...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-state" style="display: none;">
+            <h2>❌ Quotation Not Found</h2>
+            <p>The quotation you're looking for doesn't exist or has expired.</p>
+            <a href="../home/index.html" class="btn-primary">Return to Homepage</a>
+        </div>
+
+        <!-- Quotation Content -->
+        <div id="quotationContent" class="quotation-content" style="display: none;">
+            <!-- Customer Info -->
+            <div class="info-section">
+                <h2>Customer Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Name:</span>
+                        <span id="customerName"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Email:</span>
+                        <span id="customerEmail"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Phone:</span>
+                        <span id="customerPhone"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Service:</span>
+                        <span id="serviceType"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trip Details -->
+            <div class="info-section">
+                <h2>Trip Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">Destination:</span>
+                        <span id="destination"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Travel Dates:</span>
+                        <span id="travelDates"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Travelers:</span>
+                        <span id="numTravelers"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Valid Until:</span>
+                        <span id="validUntil" class="highlight"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Breakdown -->
+            <div class="pricing-section">
+                <h2>Pricing Breakdown</h2>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pricingItems">
+                        <!-- Items will be inserted here -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="subtotal-row">
+                            <td>Subtotal</td>
+                            <td id="subtotalDisplay"></td>
+                        </tr>
+                        <tr class="service-fee-row" id="serviceFeeRow" style="display: none;">
+                            <td>Service Fee</td>
+                            <td id="serviceFeeDisplay"></td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong id="totalDisplay"></strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Additional Notes -->
+            <div id="notesSection" class="notes-section" style="display: none;">
+                <h2>Important Notes</h2>
+                <p id="notesContent"></p>
+            </div>
+
+            <!-- Payment Instructions -->
+            <div class="payment-section">
+                <h2>💳 Payment Instructions</h2>
+                <p class="payment-intro">Please complete your payment using any of the following methods:</p>
+
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <h3>GCash</h3>
+                        <p><strong>Number:</strong> 09369418559</p>
+                        <p><strong>Name:</strong> Natours Travel</p>
+                    </div>
+                    <div class="payment-method">
+                        <h3>Maya</h3>
+                        <p><strong>Number:</strong> 09369418559</p>
+                        <p><strong>Name:</strong> Natours Travel</p>
+                    </div>
+                    <div class="payment-method">
+                        <h3>Bank Transfer</h3>
+                        <p><strong>Bank:</strong> BDO</p>
+                        <p><strong>Account Name:</strong> Natours Travel Services</p>
+                        <p><strong>Account Number:</strong> 1234567890</p>
+                    </div>
+                </div>
+
+                <div class="payment-upload">
+                    <h3>Upload Payment Proof</h3>
+                    <p>After payment, please upload your receipt or screenshot:</p>
+                    <form id="paymentProofForm">
+                        <input type="file" id="paymentProof" accept="image/*" required>
+                        <button type="submit" class="btn-primary">Submit Payment Proof</button>
+                    </form>
+                    <div id="uploadSuccess" class="upload-success" style="display: none;">
+                        <p>✅ Payment proof uploaded successfully! We will verify and confirm your booking shortly.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="quotation-actions">
+                <button onclick="window.print()" class="btn-secondary">🖨️ Print Quotation</button>
+                <a href="https://wa.me/639369418559" target="_blank" class="btn-secondary">💬 Contact Us on WhatsApp</a>
+            </div>
+
+            <!-- Footer -->
+            <div class="quotation-footer">
+                <p>Thank you for choosing Natours Travel!</p>
+                <p>Contact: +639369418559 | Email: natourstravel.ph@gmail.com</p>
+                <p>Website: www.natours-travel.com</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

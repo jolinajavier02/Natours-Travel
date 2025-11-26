@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Admin Panel - Natours Travel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="../home/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>📋 Quotation Generator</h1>
+            <p>Create and manage customer quotations</p>
+        </div>
+
+        <div class="admin-content">
+            <form id="quotationForm" class="quotation-form">
+                <!-- Customer Information -->
+                <div class="form-section">
+                    <h2>Customer Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerName">Customer Name *</label>
+                            <input type="text" id="customerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerEmail">Email *</label>
+                            <input type="email" id="customerEmail" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerPhone">Phone *</label>
+                            <input type="tel" id="customerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceType">Service Type *</label>
+                            <select id="serviceType" required>
+                                <option value="">Select service</option>
+                                <option value="flight">Flight Booking</option>
+                                <option value="hotel">Hotel Reservation</option>
+                                <option value="tour">Tour Package</option>
+                                <option value="cruise">Cruise Booking</option>
+                                <option value="visa">Visa Assistance</option>
+                                <option value="package">Complete Package</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip Details -->
+                <div class="form-section">
+                    <h2>Trip Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="destination">Destination *</label>
+                            <input type="text" id="destination" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="travelDates">Travel Dates *</label>
+                            <input type="text" id="travelDates" placeholder="e.g., Dec 10-20, 2025" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="numTravelers">Number of Travelers *</label>
+                            <input type="text" id="numTravelers" placeholder="e.g., 2 Adults, 1 Child" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="validUntil">Quotation Valid Until *</label>
+                            <input type="date" id="validUntil" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Breakdown -->
+                <div class="form-section">
+                    <h2>Pricing Breakdown</h2>
+                    <div id="itemsContainer">
+                        <div class="price-item">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Item Description *</label>
+                                    <input type="text" class="item-description"
+                                        placeholder="e.g., Round-trip Flight Manila-Tokyo" required>
+                                </div>
+                                <div class="form-group" style="max-width: 200px;">
+                                    <label>Amount (PHP) *</label>
+                                    <input type="number" class="item-amount" placeholder="0.00" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="addItemBtn" class="btn-secondary">+ Add Item</button>
+
+                    <div class="total-section">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₱0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Service Fee (Optional):</span>
+                            <input type="number" id="serviceFee" placeholder="0.00" step="0.01"
+                                style="max-width: 150px; text-align: right;">
+                        </div>
+                        <div class="total-row total-final">
+                            <span>TOTAL:</span>
+                            <span id="totalAmount">₱0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Notes -->
+                <div class="form-section">
+                    <h2>Additional Notes (Optional)</h2>
+                    <div class="form-group">
+                        <label for="notes">Notes for Customer</label>
+                        <textarea id="notes" rows="3"
+                            placeholder="e.g., Passport must be valid for 6 months, Travel insurance recommended..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Payment Instructions -->
+                <div class="form-section">
+                    <h2>Payment Instructions</h2>
+                    <div class="payment-info">
+                        <p><strong>Default payment methods will be shown:</strong></p>
+                        <ul>
+                            <li>GCash: 09369418559</li>
+                            <li>Maya: 09369418559</li>
+                            <li>Bank Transfer: (Add your bank details in the code)</li>
+                        </ul>
+                        <p class="note">You can customize these in the quotation/script.js file</p>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Generate Quotation</button>
+                    <button type="button" id="resetBtn" class="btn-secondary">Reset Form</button>
+                </div>
+            </form>
+
+            <!-- Generated Link Display -->
+            <div id="generatedLink" class="generated-link" style="display: none;">
+                <h3>✅ Quotation Generated Successfully!</h3>
+                <p>Share this link with your customer:</p>
+                <div class="link-box">
+                    <input type="text" id="quotationLink" readonly>
+                    <button id="copyLinkBtn" class="btn-copy">Copy Link</button>
+                </div>
+                <p class="note">The quotation has been saved. Customer can view it using this link.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+
+</html>
