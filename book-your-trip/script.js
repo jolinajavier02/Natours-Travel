@@ -66,6 +66,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Flight Type Logic (One-way vs Round-trip)
+    const flightTypeSelect = document.getElementById('flightType');
+    const flightReturnDateInput = document.getElementById('flightReturnDate');
+
+    if (flightTypeSelect && flightReturnDateInput) {
+        function updateReturnDateState() {
+            if (flightTypeSelect.value === 'one-way') {
+                flightReturnDateInput.disabled = true;
+                flightReturnDateInput.style.opacity = '0.5';
+                flightReturnDateInput.style.cursor = 'not-allowed';
+                flightReturnDateInput.value = ''; // Clear value if disabled
+            } else {
+                flightReturnDateInput.disabled = false;
+                flightReturnDateInput.style.opacity = '1';
+                flightReturnDateInput.style.cursor = 'default';
+            }
+        }
+
+        // Run on change
+        flightTypeSelect.addEventListener('change', updateReturnDateState);
+
+        // Run on init
+        updateReturnDateState();
+    }
+
     // Form submission handler with EmailJS
     const bookingForm = document.getElementById('bookingForm');
     if (bookingForm) {
@@ -106,6 +131,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 details = formData.get('visaSpecialRequests') || 'None';
             }
 
+            // Append traveler counts to details as requested
+            const numAdults = formData.get('numAdults');
+            const numChildren = formData.get('numChildren');
+            const travelerInfo = `Travelers: ${numAdults} Adults, ${numChildren} Children`;
+
+            if (details === 'None' || !details) {
+                details = travelerInfo;
+            } else {
+                details += `\n\n${travelerInfo}`;
+            }
+
             const templateParams = {
                 firstName: formData.get('firstName'),
                 middleName: formData.get('middleName') || 'N/A',
@@ -119,8 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 destination: formData.get('destination'),
                 travelDateStart: startDate,
                 travelDateEnd: endDate,
-                numAdults: formData.get('numAdults'),
-                numChildren: formData.get('numChildren'),
+                numAdults: numAdults,
+                numChildren: numChildren,
                 // Service-specific fields
                 departureCity: formData.get('departureCity') || 'N/A',
                 arrivalCity: formData.get('arrivalCity') || 'N/A',
