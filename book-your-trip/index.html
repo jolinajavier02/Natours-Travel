@@ -273,20 +273,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="travelDateStart">Preferred Start Date <span
-                                            class="required">*</span></label>
-                                    <input type="date" id="travelDateStart" name="travelDateStart" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="travelDateEnd">Preferred End Date <span
-                                            class="required">*</span></label>
-                                    <input type="date" id="travelDateEnd" name="travelDateEnd" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
+                            <div class="form-row" id="travelerCountSection" style="display:none;">
                                 <div class="form-group">
                                     <label for="numAdults">Number of Adults <span class="required">*</span></label>
                                     <input type="number" id="numAdults" name="numAdults" min="1" max="20" value="1"
@@ -300,6 +287,17 @@
 
                             <!-- Flight-Specific Information -->
                             <div id="flightFields" class="conditional-section" style="display:none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="flightDepartureDate">Departure Date <span
+                                                class="required">*</span></label>
+                                        <input type="date" id="flightDepartureDate" name="flightDepartureDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="flightReturnDate">Return Date</label>
+                                        <input type="date" id="flightReturnDate" name="flightReturnDate">
+                                    </div>
+                                </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="departureCity">Departure City/Airport</label>
@@ -344,6 +342,16 @@
 
                             <!-- Hotel-Specific Information -->
                             <div id="hotelFields" class="conditional-section" style="display:none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="checkInDate">Check-in Date <span class="required">*</span></label>
+                                        <input type="date" id="checkInDate" name="checkInDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="checkOutDate">Check-out Date <span class="required">*</span></label>
+                                        <input type="date" id="checkOutDate" name="checkOutDate">
+                                    </div>
+                                </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="roomType">Type of Room</label>
@@ -395,6 +403,11 @@
                             <div id="tourFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
+                                        <label for="tourDate">Preferred Tour Date <span
+                                                class="required">*</span></label>
+                                        <input type="date" id="tourDate" name="tourDate">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="tourType">Tour Type</label>
                                         <select id="tourType" name="tourType">
                                             <option value="" selected>Select tour type</option>
@@ -403,24 +416,28 @@
                                             <option value="custom">Custom Itinerary</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="form-row">
                                     <div class="form-group">
                                         <label for="tourPackage">Preferred Package / Destination</label>
                                         <input type="text" id="tourPackage" name="tourPackage"
                                             placeholder="e.g., El Nido Island Hopping, Japan Golden Route">
                                     </div>
-                                </div>
-
-                                <div class="form-row">
                                     <div class="form-group">
                                         <label for="tourActivities">Activities Desired</label>
                                         <input type="text" id="tourActivities" name="tourActivities"
                                             placeholder="e.g., Snorkeling, Cultural sites, Food tour">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="tourBudget">Estimated Budget (per person)</label>
-                                        <input type="text" id="tourBudget" name="tourBudget"
-                                            placeholder="e.g., ₱20,000">
-                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="tourBudget">Estimated Budget (per person)</label>
+                                    <input type="text" id="tourBudget" name="tourBudget" placeholder="e.g., ₱20,000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tourSpecialRequests">Additional Details / Requests</label>
+                                    <textarea id="tourSpecialRequests" name="tourSpecialRequests" rows="2"
+                                        placeholder="Any specific preferences or needs?"></textarea>
                                 </div>
                             </div>
 
@@ -428,10 +445,17 @@
                             <div id="cruiseFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
+                                        <label for="cruiseDate">Preferred Cruise Date <span
+                                                class="required">*</span></label>
+                                        <input type="date" id="cruiseDate" name="cruiseDate">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="cruiseLine">Preferred Cruise Line</label>
                                         <input type="text" id="cruiseLine" name="cruiseLine"
                                             placeholder="e.g., Royal Caribbean, Disney Cruise">
                                     </div>
+                                </div>
+                                <div class="form-row">
                                     <div class="form-group">
                                         <label for="cabinType">Cabin Type</label>
                                         <select id="cabinType" name="cabinType">
@@ -442,11 +466,16 @@
                                             <option value="suite">Suite</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="cruiseDestination">Cruise Route / Destination</label>
+                                        <input type="text" id="cruiseDestination" name="cruiseDestination"
+                                            placeholder="e.g., Caribbean, Mediterranean, Singapore-Malaysia">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cruiseDestination">Cruise Route / Destination</label>
-                                    <input type="text" id="cruiseDestination" name="cruiseDestination"
-                                        placeholder="e.g., Caribbean, Mediterranean, Singapore-Malaysia">
+                                    <label for="cruiseSpecialRequests">Additional Details / Requests</label>
+                                    <textarea id="cruiseSpecialRequests" name="cruiseSpecialRequests" rows="2"
+                                        placeholder="Any specific preferences or needs?"></textarea>
                                 </div>
                             </div>
 
@@ -474,31 +503,29 @@
                                     <label for="visaAppointment">Preferred Appointment Date (if applicable)</label>
                                     <input type="date" id="visaAppointment" name="visaAppointment">
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="additionalDetails">Additional Details / Requests</label>
-                                <textarea id="additionalDetails" name="additionalDetails" rows="4"
-                                    placeholder="Tell us more about your trip preferences, special needs, or any questions..."></textarea>
+                                <div class="form-group">
+                                    <label for="visaSpecialRequests">Additional Details / Requests</label>
+                                    <textarea id="visaSpecialRequests" name="visaSpecialRequests" rows="2"
+                                        placeholder="Any specific preferences or needs?"></textarea>
+                                </div>
                             </div>
 
                             <!-- Agreement / Consent -->
-                            <div class="form-checkbox-group">
-                                <input type="checkbox" id="termsAccept" name="termsAccept" required>
-                                <label for="termsAccept">I have read and accept the <a href="/legal"
-                                        target="_blank">Terms & Conditions</a> <span class="required">*</span></label>
-                            </div>
+                            <div>
+                                <div class="form-checkbox-group">
+                                    <input type="checkbox" id="termsPrivacyAccept" name="termsPrivacyAccept" required>
+                                    <label for="termsPrivacyAccept" style="font-size: 0.8rem;">I have read and accept
+                                        the <a href="/legal" target="_blank">Terms & Conditions</a> and <a
+                                            href="/legal#privacy" target="_blank">Privacy Policy</a> <span
+                                            class="required">*</span></label>
+                                </div>
 
-                            <div class="form-checkbox-group">
-                                <input type="checkbox" id="privacyAccept" name="privacyAccept" required>
-                                <label for="privacyAccept">I consent to the <a href="/legal#privacy"
-                                        target="_blank">Privacy Policy</a> <span class="required">*</span></label>
-                            </div>
-
-                            <div class="form-checkbox-group">
-                                <input type="checkbox" id="marketingConsent" name="marketingConsent">
-                                <label for="marketingConsent">I would like to receive promotional emails and
-                                    newsletters</label>
+                                <div class="form-checkbox-group">
+                                    <input type="checkbox" id="marketingConsent" name="marketingConsent">
+                                    <label for="marketingConsent" style="font-size: 0.8rem;">I would like to receive
+                                        promotional emails and
+                                        newsletters</label>
+                                </div>
                             </div>
 
                             <button type="submit" class="btn-submit">Submit Inquiry</button>

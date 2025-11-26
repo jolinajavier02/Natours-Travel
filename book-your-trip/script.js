@@ -57,6 +57,12 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (selectedService === 'visa') {
                 visaFields.style.display = 'block';
             }
+
+            // Show traveler count section
+            const travelerCountSection = document.getElementById('travelerCountSection');
+            if (travelerCountSection) {
+                travelerCountSection.style.display = ''; // Revert to CSS (grid)
+            }
         });
     }
 
@@ -74,6 +80,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Collect form data
             const formData = new FormData(this);
+            const serviceType = formData.get('serviceType');
+
+            // Determine dynamic fields based on service type
+            let startDate = 'N/A';
+            let endDate = 'N/A';
+            let details = 'None';
+
+            if (serviceType === 'flight') {
+                startDate = formData.get('flightDepartureDate') || 'N/A';
+                endDate = formData.get('flightReturnDate') || 'N/A';
+                details = formData.get('flightSpecialRequests') || 'None';
+            } else if (serviceType === 'hotel') {
+                startDate = formData.get('checkInDate') || 'N/A';
+                endDate = formData.get('checkOutDate') || 'N/A';
+                details = formData.get('hotelSpecialRequests') || 'None';
+            } else if (serviceType === 'tour') {
+                startDate = formData.get('tourDate') || 'N/A';
+                details = formData.get('tourSpecialRequests') || 'None';
+            } else if (serviceType === 'cruise') {
+                startDate = formData.get('cruiseDate') || 'N/A';
+                details = formData.get('cruiseSpecialRequests') || 'None';
+            } else if (serviceType === 'visa') {
+                startDate = formData.get('visaAppointment') || 'N/A';
+                details = formData.get('visaSpecialRequests') || 'None';
+            }
+
             const templateParams = {
                 firstName: formData.get('firstName'),
                 middleName: formData.get('middleName') || 'N/A',
@@ -83,10 +115,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 email: formData.get('email'),
                 phone: formData.get('phone'),
                 alternateContact: formData.get('alternateContact') || 'N/A',
-                serviceType: formData.get('serviceType'),
+                serviceType: serviceType,
                 destination: formData.get('destination'),
-                travelDateStart: formData.get('travelDateStart'),
-                travelDateEnd: formData.get('travelDateEnd'),
+                travelDateStart: startDate,
+                travelDateEnd: endDate,
                 numAdults: formData.get('numAdults'),
                 numChildren: formData.get('numChildren'),
                 // Service-specific fields
@@ -109,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 visaCountry: formData.get('visaCountry') || 'N/A',
                 visaType: formData.get('visaType') || 'N/A',
                 visaAppointment: formData.get('visaAppointment') || 'N/A',
-                additionalDetails: formData.get('additionalDetails') || 'None'
+                additionalDetails: details
             };
 
             // Send email using EmailJS
@@ -128,7 +160,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Reset form
                     bookingForm.reset();
 
-                    // Reset travelers display
+                    // Hide conditional sections
+                    const flightFields = document.getElementById('flightFields');
+                    const hotelFields = document.getElementById('hotelFields');
+                    const tourFields = document.getElementById('tourFields');
+                    const cruiseFields = document.getElementById('cruiseFields');
+                    const visaFields = document.getElementById('visaFields');
+                    const travelerCountSection = document.getElementById('travelerCountSection');
+
+                    if (flightFields) flightFields.style.display = 'none';
+                    if (hotelFields) hotelFields.style.display = 'none';
+                    if (tourFields) tourFields.style.display = 'none';
+                    if (cruiseFields) cruiseFields.style.display = 'none';
+                    if (visaFields) visaFields.style.display = 'none';
+                    if (travelerCountSection) travelerCountSection.style.display = 'none';
+
+                    // Reset travelers display if it exists (legacy code support)
                     const travelersInput = document.getElementById('travelersInput');
                     if (travelersInput) {
                         travelersInput.value = '1 Adult, 0 Children';
