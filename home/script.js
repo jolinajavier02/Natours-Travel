@@ -98,6 +98,13 @@ sliderConfigs.forEach(config => {
 
 // Generate Checklist Function
 function generateChecklist() {
+    // Safety check for countryData
+    if (typeof countryData === 'undefined') {
+        console.error('countryData is not loaded. Please refresh the page.');
+        alert('System update: Please refresh the page to load the latest travel data.');
+        return;
+    }
+
     const originSelect = document.getElementById('origin-country');
     const destinationSelect = document.getElementById('destination-country');
     const checklistDisplay = document.getElementById('checklist-display');
