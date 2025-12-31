@@ -87,9 +87,9 @@
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                         </div>
-                        <h4>24/7 Customer Support</h4>
-                        <p>Round-the-clock assistance for all your travel needs. We're always here to help, anytime,
-                            anywhere.</p>
+                        <h4>Customer Support</h4>
+                        <p>Dedicated assistance for all your travel needs. Our team is committed to helping you plan and
+                            enjoy your journey with responsive support.</p>
                     </div>
 
                     <div class="feature-card">
@@ -440,59 +440,6 @@
                         <div class="feature-icon">
                             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
-                                <line x1="12" y1="1" x2="12" y2="23"></line>
-                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                            </svg>
-                        </div>
-                        <h4>Budget Tips</h4>
-                        <p>How to travel smart and save.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path
-                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                                </path>
-                                <polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline>
-                                <polyline points="7.5 19.79 7.5 14.6 3 12"></polyline>
-                                <polyline points="21 12 16.5 14.6 16.5 19.79"></polyline>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                            </svg>
-                        </div>
-                        <h4>Recommended Airlines</h4>
-                        <p>Top carriers for comfort and value.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                        </div>
-                        <h4>Hotel Categories</h4>
-                        <p>Understanding star ratings and types.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="2" y1="12" x2="22" y2="12"></line>
-                                <path
-                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                                </path>
-                            </svg>
-                        </div>
-                        <h4>Visa-free Destinations</h4>
-                        <p>Where you can go without a visa.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
                                 <polyline points="9 11 12 14 22 4"></polyline>
                                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
                             </svg>
@@ -509,6 +456,63 @@
                         </div>
                         <h4>Safety Tips</h4>
                         <p>Stay safe while exploring.</p>
+                    </div>
+                </div>
+
+                <!-- Travel Checklist Generator -->
+                <div class="checklist-generator-home" style="margin-top: 4rem;">
+                    <h4 class="generator-title">Travel Checklist Generator</h4>
+                    <p class="generator-subtitle">Generate a comprehensive pre-arrival checklist for your destination
+                        country.</p>
+
+                    <div class="checklist-generator-container">
+                        <div class="country-selector-box">
+                            <div class="selector-row">
+                                <div class="selector-group">
+                                    <label for="home-origin-country">From (Origin Country)</label>
+                                    <select id="home-origin-country" class="country-select">
+                                        <option value="">Select your country</option>
+                                        <option value="PH" selected>Philippines</option>
+                                        <option value="US">United States</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="SG">Singapore</option>
+                                        <option value="MY">Malaysia</option>
+                                        <option value="TH">Thailand</option>
+                                        <option value="VN">Vietnam</option>
+                                        <option value="ID">Indonesia</option>
+                                        <option value="IN">India</option>
+                                        <option value="CN">China</option>
+                                        <option value="KR">South Korea</option>
+                                        <option value="AE">United Arab Emirates</option>
+                                    </select>
+                                </div>
+                                <div class="selector-arrow">→</div>
+                                <div class="selector-group">
+                                    <label for="home-destination-country">To (Destination Country)</label>
+                                    <select id="home-destination-country" class="country-select">
+                                        <option value="">Select destination</option>
+                                        <option value="JP" selected>Japan</option>
+                                        <option value="US">United States</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="FR">France</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="IT">Italy</option>
+                                        <option value="ES">Spain</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="NZ">New Zealand</option>
+                                        <option value="SG">Singapore</option>
+                                        <option value="MY">Malaysia</option>
+                                        <option value="TH">Thailand</option>
+                                        <option value="KR">South Korea</option>
+                                        <option value="AE">United Arab Emirates</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button id="home-generate-checklist-btn" class="btn-generate">Generate Checklist</button>
+                        </div>
                     </div>
                 </div>
 

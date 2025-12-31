@@ -1014,3 +1014,50 @@ a {
         padding: 1rem;
     }
 }
+/* Visa Overview Grid Styles */
+.visa-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.visa-overview-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.visa-overview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.visa-overview-card h4 {
+    color: var(--primary-dark);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--bg-light);
+}
+
+.visa-overview-card ul {
+    padding-left: 1.5rem;
+    margin: 0;
+}
+
+.visa-overview-card li {
+    margin-bottom: 0.7rem;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .visa-overview-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}

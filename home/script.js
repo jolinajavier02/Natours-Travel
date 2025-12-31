@@ -88,3 +88,22 @@ sliderConfigs.forEach(config => {
     // Handle window resizing
     window.addEventListener('resize', updateSlider);
 });
+// Homepage Checklist Generator - Redirect to Guidelines Page
+document.addEventListener('DOMContentLoaded', function() {
+    const homeGenerateBtn = document.getElementById('home-generate-checklist-btn');
+    
+    if (homeGenerateBtn) {
+        homeGenerateBtn.addEventListener('click', function() {
+            const origin = document.getElementById('home-origin-country').value;
+            const destination = document.getElementById('home-destination-country').value;
+            
+            if (!origin || !destination) {
+                alert('Please select both origin and destination countries.');
+                return;
+            }
+            
+            // Redirect to guidelines page with parameters
+            window.location.href = `/guidelines?origin=${origin}&destination=${destination}`;
+        });
+    }
+});
