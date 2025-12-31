@@ -469,8 +469,8 @@
                         <div class="country-selector-box">
                             <div class="selector-row">
                                 <div class="selector-group">
-                                    <label for="home-origin-country">From (Origin Country)</label>
-                                    <select id="home-origin-country" class="country-select">
+                                    <label for="origin-country">From (Origin Country)</label>
+                                    <select id="origin-country" class="country-select">
                                         <option value="">Select your country</option>
                                         <option value="PH" selected>Philippines</option>
                                         <option value="US">United States</option>
@@ -490,8 +490,8 @@
                                 </div>
                                 <div class="selector-arrow">→</div>
                                 <div class="selector-group">
-                                    <label for="home-destination-country">To (Destination Country)</label>
-                                    <select id="home-destination-country" class="country-select">
+                                    <label for="destination-country">To (Destination Country)</label>
+                                    <select id="destination-country" class="country-select">
                                         <option value="">Select destination</option>
                                         <option value="JP" selected>Japan</option>
                                         <option value="US">United States</option>
@@ -511,7 +511,19 @@
                                     </select>
                                 </div>
                             </div>
-                            <button id="home-generate-checklist-btn" class="btn-generate">Generate Checklist</button>
+                            <button id="generate-checklist-btn" class="btn-generate">Generate Checklist</button>
+                        </div>
+
+                        <!-- Checklist Display Area -->
+                        <div id="checklist-display" class="checklist-display" style="display: none;">
+                            <div class="checklist-header">
+                                <h3 id="checklist-title">Pre-Arrival Checklist for Japan</h3>
+                                <button id="print-checklist" class="btn-print">Print Checklist</button>
+                            </div>
+
+                            <div id="checklist-content" class="checklist-content">
+                                <!-- Content will be dynamically generated -->
+                            </div>
                         </div>
                     </div>
                 </div>
