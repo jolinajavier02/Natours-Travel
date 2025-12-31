@@ -542,15 +542,29 @@ function printChecklist() {
 }
 
 // Event Listeners
-document.addEventListener('DOMContentLoaded', function() {
+// Event Listeners
+function initChecklistGenerator() {
     const generateBtn = document.getElementById('generate-checklist-btn');
     const printBtn = document.getElementById('print-checklist');
 
     if (generateBtn) {
-        generateBtn.addEventListener('click', generateChecklist);
+        generateBtn.addEventListener('click', function () {
+            console.log('Generate button clicked');
+            generateChecklist();
+        });
+        console.log('Checklist generator initialized');
+    } else {
+        console.error('Generate button not found');
     }
 
     if (printBtn) {
         printBtn.addEventListener('click', printChecklist);
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChecklistGenerator);
+} else {
+    initChecklistGenerator();
+}
+
