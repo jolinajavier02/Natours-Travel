@@ -97,19 +97,41 @@ sliderConfigs.forEach(config => {
 
 
 // Generate Checklist Function
-function generateChecklist() {
-    // Safety check for countryData
-    if (typeof countryData === 'undefined') {
-        console.error('countryData is not loaded. Please refresh the page.');
-        alert('System update: Please refresh the page to load the latest travel data.');
-        return;
+// Helper to load .env variables (simulated for frontend)
+async function getEnvVariable(key) {
+    try {
+        const response = await fetch('/.env');
+        const text = await response.text();
+        const lines = text.split('\n');
+        for (const line of lines) {
+            const [k, v] = line.split('=');
+            if (k.trim() === key) return v.trim();
+        }
+    } catch (e) {
+        console.error('Error loading .env:', e);
     }
+    return null;
+}
 
+// Helper to load prompt template
+async function getPromptTemplate() {
+    try {
+        const response = await fetch('/prompt.txt');
+        return await response.text();
+    } catch (e) {
+        console.error('Error loading prompt.txt:', e);
+        return null;
+    }
+}
+
+// Generate Checklist Function using Gemini API
+async function generateChecklist() {
     const originSelect = document.getElementById('origin-country');
     const destinationSelect = document.getElementById('destination-country');
     const checklistDisplay = document.getElementById('checklist-display');
     const checklistTitle = document.getElementById('checklist-title');
     const checklistContent = document.getElementById('checklist-content');
+    const generateBtn = document.getElementById('generate-checklist-btn');
 
     const origin = originSelect.value;
     const destination = destinationSelect.value;
@@ -122,182 +144,231 @@ function generateChecklist() {
     const originName = originSelect.options[originSelect.selectedIndex].text;
     const destinationName = destinationSelect.options[destinationSelect.selectedIndex].text;
 
-    // Get country data or use default
-    const countryInfo = countryData[destination] || countryData['default'];
+    // Show loading state
+    const originalBtnText = generateBtn.textContent;
+    generateBtn.textContent = 'Generating...';
+    generateBtn.disabled = true;
+    checklistDisplay.style.display = 'none';
 
-    // Update title
-    checklistTitle.textContent = `Pre-Arrival Checklist for ${countryInfo.name}`;
+    try {
+        const apiKey = await getEnvVariable('GEMINI_API_KEY');
+        const promptTemplate = await getPromptTemplate();
 
-    // Generate content
-    let html = '';
+        if (!apiKey || !promptTemplate) {
+            throw new Error('API Key or Prompt Template missing. Please check .env and prompt.txt');
+        }
 
-    // Quick Facts Section
-    html += `<div class="checklist-section">
-        <h4>Quick Facts</h4>
-        <div class="quick-facts-grid">
-            <div class="fact-item">
-                <span class="fact-label">Weather</span>
-                <span class="fact-value">${countryInfo.quickFacts.weather}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Air Quality</span>
-                <span class="fact-value">${countryInfo.quickFacts.airQuality}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Average Internet Speed</span>
-                <span class="fact-value">${countryInfo.quickFacts.internetSpeed}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Visa Requirements</span>
-                <span class="fact-value">${countryInfo.quickFacts.visaRequirements[origin] || countryInfo.quickFacts.visaRequirements['default']}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Arrival Card</span>
-                <span class="fact-value">${countryInfo.quickFacts.arrivalCard}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Time Zone</span>
-                <span class="fact-value">${countryInfo.quickFacts.timeZone}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Phone Country Code</span>
-                <span class="fact-value">${countryInfo.quickFacts.phoneCode}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Plug Type & Voltage</span>
-                <span class="fact-value">${countryInfo.quickFacts.plugType}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Official Language</span>
-                <span class="fact-value">${countryInfo.quickFacts.language}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Driving Side</span>
-                <span class="fact-value">${countryInfo.quickFacts.drivingSide}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Network Coverage Quality</span>
-                <span class="fact-value">${countryInfo.quickFacts.networkCoverage}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Traveler Safety Index</span>
-                <span class="fact-value">${countryInfo.quickFacts.safetyIndex}</span>
-            </div>
-        </div>
-    </div>`;
+        const prompt = promptTemplate
+            .replace('{origin}', originName)
+            .replace('{destination}', destinationName)
+            .replace('{origin_code}', origin);
 
-    // Before You Arrive Section
-    html += `<div class="checklist-section">
-        <h4>Before You Arrive</h4>`;
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
 
-    // Entry & Documents
-    html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Entry & Documents</h5>
-        <ul class="checklist-items">`;
-    countryInfo.beforeArrival.entryDocuments.forEach(item => {
-        html += `<li>${item}</li>`;
-    });
-    html += `</ul>`;
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Gemini API Error:', errorData);
+            throw new Error(`Gemini API error: ${response.status} ${response.statusText}`);
+        }
 
-    // Health & Safety
-    html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Health & Safety</h5>
-        <ul class="checklist-items">`;
-    countryInfo.beforeArrival.healthSafety.forEach(item => {
-        html += `<li>${item}</li>`;
-    });
-    html += `</ul>`;
+        const data = await response.json();
+        const resultText = data.candidates[0].content.parts[0].text;
 
-    // Money & Payments
-    html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Money & Payments</h5>
-        <ul class="checklist-items">`;
-    countryInfo.beforeArrival.moneyPayments.forEach(item => {
-        html += `<li>${item}</li>`;
-    });
-    html += `</ul>`;
+        // Clean the result text in case Gemini adds markdown code blocks
+        const cleanJson = resultText.replace(/```json\n?|\n?```/g, '').trim();
+        const countryInfo = JSON.parse(cleanJson);
 
-    // Connectivity
-    html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Connectivity</h5>
-        <ul class="checklist-items">`;
-    countryInfo.beforeArrival.connectivity.forEach(item => {
-        html += `<li>${item}</li>`;
-    });
-    html += `</ul>`;
+        // Update title
+        checklistTitle.textContent = `Pre-Arrival Checklist for ${countryInfo.name}`;
 
-    // Arrival & Customs
-    html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Arrival & Customs</h5>
-        <ul class="checklist-items">`;
-    countryInfo.beforeArrival.arrivalCustoms.forEach(item => {
-        html += `<li>${item}</li>`;
-    });
-    html += `</ul></div>`;
+        // Generate content
+        let html = '';
 
-    // Must-Try Foods
-    html += `<div class="checklist-section">
-        <h4>Must-Try Local Foods & Drinks</h4>
-        <div class="food-grid">`;
-    countryInfo.mustTryFoods.forEach(food => {
-        html += `<div class="food-item">
-            <h5>${food.name}</h5>
-            <p>${food.description}</p>
+        // Quick Facts Section
+        html += `<div class="checklist-section">
+            <h4>Quick Facts</h4>
+            <div class="quick-facts-grid">
+                <div class="fact-item">
+                    <span class="fact-label">Weather</span>
+                    <span class="fact-value">${countryInfo.quickFacts.weather}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Air Quality</span>
+                    <span class="fact-value">${countryInfo.quickFacts.airQuality}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Average Internet Speed</span>
+                    <span class="fact-value">${countryInfo.quickFacts.internetSpeed}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Visa Requirements</span>
+                    <span class="fact-value">${countryInfo.quickFacts.visaRequirements[origin] || countryInfo.quickFacts.visaRequirements['default']}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Arrival Card</span>
+                    <span class="fact-value">${countryInfo.quickFacts.arrivalCard}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Time Zone</span>
+                    <span class="fact-value">${countryInfo.quickFacts.timeZone}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Phone Country Code</span>
+                    <span class="fact-value">${countryInfo.quickFacts.phoneCode}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Plug Type & Voltage</span>
+                    <span class="fact-value">${countryInfo.quickFacts.plugType}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Official Language</span>
+                    <span class="fact-value">${countryInfo.quickFacts.language}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Driving Side</span>
+                    <span class="fact-value">${countryInfo.quickFacts.drivingSide}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Network Coverage Quality</span>
+                    <span class="fact-value">${countryInfo.quickFacts.networkCoverage}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Traveler Safety Index</span>
+                    <span class="fact-value">${countryInfo.quickFacts.safetyIndex}</span>
+                </div>
+            </div>
         </div>`;
-    });
-    html += `</div></div>`;
 
-    // Popular Places
-    html += `<div class="checklist-section">
-        <h4>Popular Places to Visit</h4>
-        <div class="places-grid">`;
-    countryInfo.popularPlaces.forEach(place => {
-        html += `<div class="place-item">
-            <h5>${place.name}</h5>
-            <p>${place.description}</p>
+        // Before You Arrive Section
+        html += `<div class="checklist-section">
+            <h4>Before You Arrive</h4>`;
+
+        // Entry & Documents
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Entry & Documents</h5>
+            <ul class="checklist-items">`;
+        countryInfo.beforeArrival.entryDocuments.forEach(item => {
+            html += `<li>${item}</li>`;
+        });
+        html += `</ul>`;
+
+        // Health & Safety
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Health & Safety</h5>
+            <ul class="checklist-items">`;
+        countryInfo.beforeArrival.healthSafety.forEach(item => {
+            html += `<li>${item}</li>`;
+        });
+        html += `</ul>`;
+
+        // Money & Payments
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Money & Payments</h5>
+            <ul class="checklist-items">`;
+        countryInfo.beforeArrival.moneyPayments.forEach(item => {
+            html += `<li>${item}</li>`;
+        });
+        html += `</ul>`;
+
+        // Connectivity
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Connectivity</h5>
+            <ul class="checklist-items">`;
+        countryInfo.beforeArrival.connectivity.forEach(item => {
+            html += `<li>${item}</li>`;
+        });
+        html += `</ul>`;
+
+        // Arrival & Customs
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Arrival & Customs</h5>
+            <ul class="checklist-items">`;
+        countryInfo.beforeArrival.arrivalCustoms.forEach(item => {
+            html += `<li>${item}</li>`;
+        });
+        html += `</ul></div>`;
+
+        // Must-Try Foods
+        html += `<div class="checklist-section">
+            <h4>Must-Try Local Foods & Drinks</h4>
+            <div class="food-grid">`;
+        countryInfo.mustTryFoods.forEach(food => {
+            html += `<div class="food-item">
+                <h5>${food.name}</h5>
+                <p>${food.description}</p>
+            </div>`;
+        });
+        html += `</div></div>`;
+
+        // Popular Places
+        html += `<div class="checklist-section">
+            <h4>Popular Places to Visit</h4>
+            <div class="places-grid">`;
+        countryInfo.popularPlaces.forEach(place => {
+            html += `<div class="place-item">
+                <h5>${place.name}</h5>
+                <p>${place.description}</p>
+            </div>`;
+        });
+        html += `</div></div>`;
+
+        // Local Insights
+        html += `<div class="checklist-section">
+            <h4>Local Insights</h4>
+            <ul class="insights-list">`;
+        countryInfo.localInsights.forEach(insight => {
+            html += `<li>${insight}</li>`;
+        });
+        html += `</ul></div>`;
+
+        // Smart Extras
+        html += `<div class="checklist-section">
+            <h4>Smart Extras</h4>
+            <div class="alert-box">
+                <h5>Seasonal Alerts</h5>
+                <p>${countryInfo.smartExtras.seasonalAlerts}</p>
+            </div>
+            <div class="alert-box" style="margin-top: 1rem; background: #fff3e0; border-left-color: #ff9800;">
+                <h5>Common Scams</h5>
+                <p>${countryInfo.smartExtras.commonScams}</p>
+            </div>
+            <div class="quick-facts-grid" style="margin-top: 1rem;">
+                <div class="fact-item">
+                    <span class="fact-label">Local Transport/Payment Apps</span>
+                    <span class="fact-value">${countryInfo.smartExtras.localApps}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Roaming Charges</span>
+                    <span class="fact-value">${countryInfo.smartExtras.roamingCharges}</span>
+                </div>
+                <div class="fact-item">
+                    <span class="fact-label">Packing Tips</span>
+                    <span class="fact-value">${countryInfo.smartExtras.packingTips}</span>
+                </div>
+            </div>
         </div>`;
-    });
-    html += `</div></div>`;
 
-    // Local Insights
-    html += `<div class="checklist-section">
-        <h4>Local Insights</h4>
-        <ul class="insights-list">`;
-    countryInfo.localInsights.forEach(insight => {
-        html += `<li>${insight}</li>`;
-    });
-    html += `</ul></div>`;
+        // Update content and show
+        checklistContent.innerHTML = html;
+        checklistDisplay.style.display = 'block';
 
-    // Smart Extras
-    html += `<div class="checklist-section">
-        <h4>Smart Extras</h4>
-        <div class="alert-box">
-            <h5>Seasonal Alerts</h5>
-            <p>${countryInfo.smartExtras.seasonalAlerts}</p>
-        </div>
-        <div class="alert-box" style="margin-top: 1rem; background: #fff3e0; border-left-color: #ff9800;">
-            <h5>Common Scams</h5>
-            <p>${countryInfo.smartExtras.commonScams}</p>
-        </div>
-        <div class="quick-facts-grid" style="margin-top: 1rem;">
-            <div class="fact-item">
-                <span class="fact-label">Local Transport/Payment Apps</span>
-                <span class="fact-value">${countryInfo.smartExtras.localApps}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Roaming Charges</span>
-                <span class="fact-value">${countryInfo.smartExtras.roamingCharges}</span>
-            </div>
-            <div class="fact-item">
-                <span class="fact-label">Packing Tips</span>
-                <span class="fact-value">${countryInfo.smartExtras.packingTips}</span>
-            </div>
-        </div>
-    </div>`;
+        // Scroll to checklist
+        setTimeout(() => {
+            checklistDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
 
-    // Update content and show
-    checklistContent.innerHTML = html;
-    checklistDisplay.style.display = 'block';
-
-    // Scroll to checklist
-    setTimeout(() => {
-        checklistDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    } catch (error) {
+        console.error('Error generating checklist:', error);
+        alert('Failed to generate checklist. Please try again later.');
+    } finally {
+        generateBtn.textContent = originalBtnText;
+        generateBtn.disabled = false;
+    }
 }
 
 // Print Checklist Function
