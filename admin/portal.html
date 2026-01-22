@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Natours Travel</title>
+    <link rel="stylesheet" href="../quotation/style.css">
+    <link rel="stylesheet" href="admin-style.css">
+    <link rel="icon" type="image/png" href="../home/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../home/images/logo.png" alt="Logo" class="sidebar-logo">
+                <h2>Natours Admin</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="overview">
+                    <i class="fas fa-chart-line"></i> Overview
+                </a>
+                <a href="#" class="nav-item" data-tab="bookings">
+                    <i class="fas fa-calendar-check"></i> Bookings
+                </a>
+                <a href="#" class="nav-item" data-tab="quotations">
+                    <i class="fas fa-file-invoice-dollar"></i> Quotations
+                </a>
+                <a href="../quotation/admin.html" class="nav-item">
+                    <i class="fas fa-plus-circle"></i> New Quotation
+                </a>
+                <div class="nav-divider"></div>
+                <a href="../home/index.html" class="nav-item">
+                    <i class="fas fa-external-link-alt"></i> View Website
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1 id="tabTitle">Dashboard Overview</h1>
+                    <p id="tabSubtitle">Welcome back, Admin!</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-refresh" id="refreshData">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <div class="admin-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=09713D&color=fff" alt="Admin">
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Overview Tab -->
+                <section id="overviewTab" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon tour"><i class="fas fa-map-marked-alt"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Bookings</h3>
+                                <p class="stat-value" id="totalBookingsCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon quote"><i class="fas fa-file-invoice"></i></div>
+                            <div class="stat-info">
+                                <h3>Active Quotations</h3>
+                                <p class="stat-value" id="totalQuotesCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon visa"><i class="fas fa-passport"></i></div>
+                            <div class="stat-info">
+                                <h3>Visa Requests</h3>
+                                <p class="stat-value" id="visaRequestsCount">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon revenue"><i class="fas fa-wallet"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Revenue</h3>
+                                <p class="stat-value" id="totalRevenue">₱0.00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-grid">
+                        <div class="data-card">
+                            <div class="card-header">
+                                <h2>Recent Bookings</h2>
+                                <button class="btn-view-all" data-tab="bookings">View All</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Service</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentBookingsTable">
+                                        <!-- Data populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bookings Tab -->
+                <section id="bookingsTab" class="tab-content">
+                    <div class="data-card">
+                        <div class="card-header">
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="bookingSearch" placeholder="Search bookings...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Customer</th>
+                                        <th>Service</th>
+                                        <th>Destination</th>
+                                        <th>Payment</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allBookingsTable">
+                                    <!-- Data populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quotations Tab -->
+                <section id="quotationsTab" class="tab-content">
+                    <div class="data-card">
+                        <div class="card-header">
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="quoteSearch" placeholder="Search quotations...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer</th>
+                                        <th>Service</th>
+                                        <th>Total</th>
+                                        <th>Valid Until</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allQuotesTable">
+                                    <!-- Data populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Booking Detail Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="bookingDetailContent"></div>
+        </div>
+    </div>
+
+    <script src="admin-dashboard.js"></script>
+</body>
+
+</html>

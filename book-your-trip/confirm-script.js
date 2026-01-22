@@ -187,6 +187,15 @@ document.addEventListener('DOMContentLoaded', function () {
             additionalDetails: bookingData.additionalDetails || 'None'
         }, { publicKey: 'r3zhCF9T2VEWag5c4' });
 
+        // Save to local storage for the Admin Portal
+        const allBookings = JSON.parse(localStorage.getItem('all_bookings') || '[]');
+        allBookings.push({
+            ...bookingData,
+            ...emailParams,
+            id: emailParams.booking_id
+        });
+        localStorage.setItem('all_bookings', JSON.stringify(allBookings));
+
         Promise.all([customerEmail, adminEmail])
             .then(function () {
                 // Clear session storage
