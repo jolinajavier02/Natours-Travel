@@ -1,101 +1,131 @@
-// Enhanced Confirmation & Payment Script
+// Comprehensive Confirmation & Anti-Fraud Logic
 document.addEventListener('DOMContentLoaded', function () {
     const bookingData = JSON.parse(sessionStorage.getItem('bookingData'));
-    const btnDone = document.getElementById('btnDone');
-    const refInput = document.getElementById('refNum');
-    const nameInput = document.getElementById('payorName');
-    const methodInput = document.getElementById('payMethod');
+    const submitBtn = document.getElementById('submitBtn');
+    const refInput = document.getElementById('refId');
+    const nameInput = document.getElementById('senderName');
+    const methodSelect = document.getElementById('payMethod');
+    const refError = document.getElementById('refError');
 
     if (!bookingData) {
-        alert('No booking data found. Please fill out the booking form first.');
+        alert('No booking session found. Redirecting to form...');
         window.location.href = 'index.html';
         return;
     }
 
     // Populate Summary
-    const summaryDiv = document.getElementById('summaryContent');
-    const items = [
-        { label: 'Customer', value: `${bookingData.firstName} ${bookingData.lastName}` },
-        { label: 'Service', value: formatServiceType(bookingData.serviceType) },
-        { label: 'Destination', value: bookingData.destination },
-        { label: 'Travel Date', value: bookingData.travelDateStart },
-        { label: 'Travelers', value: `${bookingData.numAdults} Adult(s), ${bookingData.numChildren} Child(ren)` }
+    const summaryBox = document.getElementById('summaryBox');
+    const details = [
+        { label: 'Customer Name', value: `${bookingData.firstName} ${bookingData.lastName}` },
+        { label: 'Service Category', value: formatStr(bookingData.serviceType) },
+        { label: 'Main Destination', value: bookingData.destination },
+        { label: 'Proposed Date', value: bookingData.travelDateStart },
+        { label: 'Group Size', value: `${bookingData.numAdults} Adult(s), ${bookingData.numChildren} Child(ren)` }
     ];
 
-    summaryDiv.innerHTML = items.map(item => `
+    summaryBox.innerHTML = details.map(d => `
         <div class="summary-item">
-            <span class="label">${item.label}</span>
-            <span class="value">${item.value}</span>
+            <span class="label">${d.label}</span>
+            <span class="value">${d.value}</span>
         </div>
     `).join('');
 
-    // Form Validation (Enable button only when reference is input)
-    function validateForm() {
-        const isRefValid = refInput.value.trim().length >= 6;
-        const isNameValid = nameInput.value.trim().length >= 3;
-        const isMethodValid = methodInput.value !== "";
+    // Reference ID Patterns for highaccuracy validation
+    const patterns = {
+        'GCash': /^\d{13}$/,                      // GCash: 13 digits
+        'Maya': /^[a-zA-Z0-9]{12}$/,               // Maya: 12 alphanumeric
+        'BDO Transfer': /^\d{10,12}$/,             // Bank: 10-12 digits
+        'Other Bank': /^[a-zA-Z0-9]{6,20}$/        // Generic: lengths vary
+    };
 
-        if (isRefValid && isNameValid && isMethodValid) {
-            btnDone.disabled = false;
-            btnDone.classList.add('active');
+    function validateInputs() {
+        const method = methodSelect.value;
+        const refValue = refInput.value.replace(/\s/g, ''); // strip spaces
+        const nameValue = nameInput.value.trim();
+
+        let isRefValid = false;
+
+        if (method && patterns[method]) {
+            isRefValid = patterns[method].test(refValue);
+
+            if (!isRefValid && refValue.length > 0) {
+                refError.style.display = 'block';
+                refError.innerText = getFormatHint(method);
+                refInput.style.borderColor = 'var(--error-red)';
+            } else {
+                refError.style.display = 'none';
+                refInput.style.borderColor = isRefValid ? 'var(--primary-color)' : '#eee';
+            }
+        }
+
+        const isNameValid = nameValue.length >= 4;
+
+        if (isRefValid && isNameValid && method !== "") {
+            submitBtn.disabled = false;
+            submitBtn.classList.add('ready');
         } else {
-            btnDone.disabled = true;
-            btnDone.classList.remove('active');
+            submitBtn.disabled = true;
+            submitBtn.classList.remove('ready');
         }
     }
 
-    refInput.addEventListener('input', validateForm);
-    nameInput.addEventListener('input', validateForm);
-    methodInput.addEventListener('change', validateForm);
+    function getFormatHint(method) {
+        if (method === 'GCash') return 'Error: GCash Reference must be exactly 13 digits.';
+        if (method === 'Maya') return 'Error: Maya Ref ID must be 12 characters (alphanumeric).';
+        if (method === 'BDO Transfer') return 'Error: Bank Ref should be 10-12 digits.';
+        return 'Error: Invalid transaction ID format.';
+    }
 
-    // Final Submission
-    btnDone.addEventListener('click', function () {
-        if (btnDone.disabled) return;
+    // Listeners
+    [refInput, nameInput].forEach(el => el.addEventListener('input', validateInputs));
+    methodSelect.addEventListener('change', () => {
+        // Clear ref on method change to force re-entry/re-validation
+        refInput.value = '';
+        validateInputs();
+    });
 
-        btnDone.innerText = 'Processing...';
-        btnDone.disabled = true;
+    // Final Process
+    submitBtn.addEventListener('click', function () {
+        if (submitBtn.disabled) return;
 
-        const paymentData = {
-            payment_method: methodInput.value,
-            reference_number: refInput.value,
-            account_name: nameInput.value,
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+        submitBtn.disabled = true;
+
+        const bookingId = generateBookingId();
+        const finalPayload = {
+            ...bookingData,
+            payment_method: methodSelect.value,
+            reference_number: refInput.value.trim(),
+            account_name: nameInput.value.trim(),
+            booking_id: bookingId,
             submitted_at: new Date().toLocaleString()
         };
 
-        // Combine data
-        const finalData = { ...bookingData, ...paymentData };
+        // 1. Store in Local Portal (Admin View)
+        const currentData = JSON.parse(localStorage.getItem('all_bookings') || '[]');
+        currentData.push(finalPayload);
+        localStorage.setItem('all_bookings', JSON.stringify(currentData));
 
-        // Save to Local Admin Portal
-        const allBookings = JSON.parse(localStorage.getItem('all_bookings') || '[]');
-        allBookings.push({
-            ...finalData,
-            booking_id: generateBookingId()
-        });
-        localStorage.setItem('all_bookings', JSON.stringify(allBookings));
-
-        // Send Email via EmailJS
-        emailjs.send('service_wwjqu3l', 'template_v84hwer', {
-            ...finalData,
-            booking_id: generateBookingId()
-        }, 'r3zhCF9T2VEWag5c4')
+        // 2. Send Official Confirmation via EmailJS
+        emailjs.send('service_wwjqu3l', 'template_v84hwer', finalPayload, 'r3zhCF9T2VEWag5c4')
             .then(() => {
-                alert('🎉 Booking Successfully Submitted! Please check your email for confirmation. Our team will contact you shortly.');
+                alert('✅ Success! Your booking and payment reference have been submitted for verification. Please check your email for the confirmation voucher.');
                 sessionStorage.removeItem('bookingData');
                 window.location.href = '../home/';
             })
             .catch(err => {
-                console.error('Email error:', err);
-                alert('There was a problem sending the confirmation email, but your booking has been saved in our system.');
+                console.error('Email failed:', err);
+                // Even if email fails, it's saved in the admin portal
+                alert('Booking record saved! (Note: Email confirmation is delayed, but our team can see your record in the admin portal).');
                 window.location.href = '../home/';
             });
     });
 
-    function formatServiceType(type) {
-        const types = { 'flight': 'Flight', 'hotel': 'Hotel', 'tour': 'Tour', 'cruise': 'Cruise', 'visa': 'Visa' };
-        return types[type] || type;
+    function formatStr(s) {
+        return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'N/A';
     }
 
     function generateBookingId() {
-        return 'BK-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        return 'NT-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
     }
 });

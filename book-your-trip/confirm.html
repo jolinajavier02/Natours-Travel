@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirm Booking & Payment - Natours Travel</title>
+    <title>Confirm Booking & Secure Payment - Natours Travel</title>
     <link rel="stylesheet" href="../book-your-trip/style.css">
     <link rel="icon" type="image/png" href="../home/images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -28,49 +29,67 @@
             --primary-dark: #0a8547;
             --gcash-blue: #0159E1;
             --maya-green: #29AC81;
+            --error-red: #dc3545;
             --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         body {
             background-color: #f4f7f6;
             padding-top: 40px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .required {
+            color: var(--error-red);
+            font-weight: bold;
+            margin-left: 2px;
         }
 
         .booking-confirm-container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 0.9fr;
             gap: 2rem;
             padding: 2rem;
         }
 
         .card {
             background: white;
-            border-radius: 20px;
-            padding: 2rem;
+            border-radius: 24px;
+            padding: 2.5rem;
             box-shadow: var(--shadow);
         }
 
         .card h2 {
             color: var(--primary-color);
+            margin-top: 0;
             margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
+            gap: 12px;
+            font-size: 1.6rem;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 1rem;
         }
 
         /* Summary Section */
-        .summary-list {
-            list-style: none;
+        .summary-wrapper {
+            background: #fafafa;
+            padding: 1.8rem;
+            border-radius: 18px;
+            border: 1px solid #eee;
         }
 
         .summary-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .summary-item:last-of-type {
+            border-bottom: none;
         }
 
         .summary-item .label {
@@ -81,133 +100,184 @@
         .summary-item .value {
             font-weight: 600;
             text-align: right;
+            color: #1a1a1a;
         }
 
         .total-box {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: #e8f5e9;
-            border-radius: 12px;
+            margin-top: 2rem;
+            padding: 1.8rem;
+            background: linear-gradient(135deg, #e8f5e9, #f1fcf4);
+            border: 1px solid #c8e6c9;
+            border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .total-box span {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        /* Payment Section */
-        .qr-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .qr-card {
-            text-align: center;
-            padding: 1rem;
-            border: 2px solid #f0f0f0;
-            border-radius: 15px;
-            transition: all 0.3s;
-        }
-
-        .qr-card.active {
-            border-color: var(--primary-color);
-            background: #f1fcf4;
-        }
-
-        .qr-card img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 0.5rem;
-        }
-
-        .qr-card .method-name {
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .qr-card .method-num {
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        /* Bank Section */
-        .bank-details {
-            margin-top: 1.5rem;
-            padding: 1.2rem;
-            border-left: 4px solid var(--primary-color);
-            background: #f9f9f9;
-            border-radius: 0 12px 12px 0;
-        }
-
-        .bank-details p {
-            margin: 4px 0;
-            font-size: 0.95rem;
-        }
-
-        /* Form Controls */
-        .payment-form {
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
+        .total-box span:first-child {
             font-weight: 600;
-            font-size: 0.9rem;
             color: #444;
         }
 
-        input,
-        select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #eee;
-            border-radius: 10px;
-            font-size: 1rem;
+        .total-box span:last-child {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        /* Anti-Fraud Box */
+        .fraud-warning {
+            background: #fff5f5;
+            border: 1px solid #ffdada;
+            border-left: 5px solid var(--error-red);
+            padding: 1.2rem;
+            margin-top: 2rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .fraud-warning i {
+            color: var(--error-red);
+            font-size: 1.3rem;
+            margin-top: 2px;
+        }
+
+        .fraud-warning div h4 {
+            color: #912d2b;
+            margin: 0 0 5px 0;
+            font-size: 0.95rem;
+        }
+
+        .fraud-warning div p {
+            font-size: 0.85rem;
+            color: #b54d4b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Payment Section */
+        .qr-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .qr-box {
+            background: white;
+            border: 2px solid #efefef;
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
             transition: all 0.3s;
         }
 
-        input:focus {
+        .qr-box:hover {
             border-color: var(--primary-color);
-            outline: none;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
 
-        .btn-done {
+        .qr-box img {
             width: 100%;
-            padding: 1rem;
-            background: #ccc;
-            color: white;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+        }
+
+        .qr-label {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .bank-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #eee;
+        }
+
+        .bank-info h4 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .bank-info p {
+            margin: 4px 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(9, 113, 61, 0.1);
+        }
+
+        .validation-msg {
+            font-size: 0.8rem;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .validation-msg.error {
+            color: var(--error-red);
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: #ddd;
+            color: #888;
             border: none;
             border-radius: 50px;
             font-size: 1.1rem;
             font-weight: 700;
             cursor: not-allowed;
-            margin-top: 1rem;
             transition: all 0.3s;
+            margin-top: 1rem;
         }
 
-        .btn-done.active {
+        .btn-submit.ready {
             background: var(--primary-color);
+            color: white;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(9, 113, 61, 0.3);
+            box-shadow: 0 6px 20px rgba(9, 113, 61, 0.3);
         }
 
-        .btn-done.active:hover {
+        .btn-submit.ready:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
         }
 
-        @media (max-width: 850px) {
+        @media (max-width: 900px) {
             .booking-confirm-container {
                 grid-template-columns: 1fr;
             }
@@ -217,62 +287,55 @@
 
 <body>
     <div class="booking-confirm-container">
-        <!-- Left: Booking Summary -->
+        <!-- Left: Summary -->
         <div class="card">
-            <h2><i class="fas fa-file-alt"></i> Booking Summary</h2>
-            <div id="summaryContent" class="summary-list">
+            <h2><i class="fas fa-clipboard-check"></i> Final Booking Summary</h2>
+            <div class="summary-wrapper" id="summaryBox">
                 <!-- Populated by JS -->
             </div>
 
             <div class="total-box">
-                <span>Initial Deposit Total:</span>
-                <span id="displayTotal">₱5,500.00</span>
+                <span>Total Amount Due:</span>
+                <span id="totalDisplay">₱5,500.00</span>
             </div>
 
-            <div style="margin-top: 1.5rem; font-size: 0.85rem; color: #777; line-height: 1.4;">
-                <p><strong>Note:</strong> This amount is for the slot reservation and processing fee. A detailed final
-                    quotation will be sent to your email after our team validates your requirements.</p>
+            <div class="fraud-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <h4>Attention: Identity & Payment Verification</h4>
+                    <p>Natours Travel cross-checks every Reference ID manually with bank records. Providing a fake Ref
+                        No. or tampered receipt is considered fraud and will result in immediate disqualification of
+                        your booking.</p>
+                </div>
             </div>
         </div>
 
-        <!-- Right: Payment Portal -->
+        <!-- Right: Payment -->
         <div class="card">
-            <h2><i class="fas fa-credit-card"></i> Payment Portal</h2>
-            <p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">Scan the QR code or use the bank details
-                below:</p>
+            <h2><i class="fas fa-shield-alt"></i> Secure Payment Portal</h2>
 
-            <div class="qr-grid">
-                <div class="qr-card" id="btnGcash">
+            <div class="qr-section">
+                <div class="qr-box">
                     <img src="../home/images/gcash-qr.png" alt="GCash">
-                    <div class="method-name" style="color:var(--gcash-blue)">GCash</div>
-                    <div class="method-num">09369418559</div>
+                    <div class="qr-label" style="color:var(--gcash-blue)">GCASH</div>
+                    <div style="font-size:0.8rem; color:#666">09369418559</div>
                 </div>
-                <div class="qr-card" id="btnMaya">
+                <div class="qr-box">
                     <img src="../home/images/maya-qr.png" alt="Maya">
-                    <div class="method-name" style="color:var(--maya-green)">Maya</div>
-                    <div class="method-num">09369418559</div>
+                    <div class="qr-label" style="color:var(--maya-green)">MAYA</div>
+                    <div style="font-size:0.8rem; color:#666">09369418559</div>
                 </div>
             </div>
 
-            <div class="bank-details">
-                <p><strong><i class="fas fa-university"></i> BDO Unibank</strong></p>
-                <p>Account Name: Natours Travel Services</p>
-                <p>Account Number: 1234-5678-9012</p>
+            <div class="bank-info">
+                <h4><i class="fas fa-university"></i> BDO Unibank (Bank Transfer)</h4>
+                <p><strong>Account Name:</strong> Natours Travel Services</p>
+                <p><strong>Account Number:</strong> 1234-5678-9012</p>
             </div>
 
-            <form class="payment-form" id="finalPaymentForm">
+            <form id="finalPaymentForm">
                 <div class="form-group">
-                    <label>Reference Number (Bank or E-Wallet) *</label>
-                    <input type="text" id="refNum" placeholder="Enter transaction reference ID" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Account Holder Name *</label>
-                    <input type="text" id="payorName" placeholder="Name on the bank/ewallet account" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Selected Payment Method *</label>
+                    <label>Selected Payment Method <span class="required">*</span></label>
                     <select id="payMethod" required>
                         <option value="">-- Choose Method --</option>
                         <option value="GCash">GCash</option>
@@ -282,15 +345,25 @@
                     </select>
                 </div>
 
-                <button type="button" id="btnDone" class="btn-done" disabled>
-                    Complete Booking
+                <div class="form-group">
+                    <label id="refLabel">Transaction Reference Number <span class="required">*</span></label>
+                    <input type="text" id="refId" placeholder="Input the 13-digit GCash Reference or Bank ID" required>
+                    <span id="refError" class="validation-msg error" style="display:none;">Invalid format. Please check
+                        your receipt.</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Account Name (Sender) <span class="required">*</span></label>
+                    <input type="text" id="senderName" placeholder="Exact name on the receipt" required>
+                </div>
+
+                <button type="button" id="submitBtn" class="btn-submit" disabled>
+                    Finalize & Complete Booking
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="confirm-script.js"></script>
 </body>
 
