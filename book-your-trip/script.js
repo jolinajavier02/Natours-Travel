@@ -59,11 +59,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 visaFields.style.display = 'block';
             }
 
-            // Show traveler count section
-            const travelerCountSection = document.getElementById('travelerCountSection');
-            if (travelerCountSection) {
-                travelerCountSection.style.display = ''; // Revert to CSS (grid)
-            }
         });
     }
 
@@ -136,11 +131,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 details = formData.get('visaSpecialRequests') || 'None';
             }
 
-            // Explicitly capture traveler counts
-            const numAdults = formData.get('numAdults') || '1';
-            const numChildren = formData.get('numChildren') || '0';
+            // Explicitly capture traveler counts based on active section
+            let numAdults = '1';
+            let numChildren = '0';
 
-            // Append traveler counts to details so it appears in the email body even if the template is missing variables
+            if (serviceType === 'flight') {
+                numAdults = formData.get('numAdults_f') || '1';
+                numChildren = formData.get('numChildren_f') || '0';
+            } else if (serviceType === 'hotel') {
+                numAdults = formData.get('numAdults_h') || '1';
+                numChildren = formData.get('numChildren_h') || '0';
+            } else if (serviceType === 'tour') {
+                numAdults = formData.get('numAdults_t') || '1';
+                numChildren = formData.get('numChildren_t') || '0';
+            } else if (serviceType === 'cruise') {
+                numAdults = formData.get('numAdults_c') || '1';
+                numChildren = formData.get('numChildren_c') || '0';
+            } else if (serviceType === 'visa') {
+                numAdults = formData.get('numAdults_v') || '1';
+                numChildren = formData.get('numChildren_v') || '0';
+            }
+
+            // Append traveler counts to details
             const travelerInfo = `Travelers: ${numAdults} Adults, ${numChildren} Children`;
 
             if (details === 'None' || !details) {

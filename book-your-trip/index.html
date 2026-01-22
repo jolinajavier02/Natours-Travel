@@ -234,31 +234,31 @@
                                 </div>
                             </div>
 
-                            <div class="form-row" id="travelerCountSection" style="display:none;">
-                                <div class="form-group">
-                                    <label for="numAdults">Number of Adults <span class="required">*</span></label>
-                                    <input type="number" id="numAdults" name="numAdults" min="1" max="20" value="1"
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="numChildren">Number of Children</label>
-                                    <input type="number" id="numChildren" name="numChildren" min="0" max="20" value="0">
-                                </div>
-                            </div>
+
 
                             <!-- Flight-Specific Information -->
                             <div id="flightFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="flightDepartureDate">Departure Date <span
-                                                class="required">*</span></label>
-                                        <input type="date" id="flightDepartureDate" name="flightDepartureDate">
+                                        <label for="flightType">Trip Type</label>
+                                        <select id="flightType" name="flightType">
+                                            <option value="" selected>Select type</option>
+                                            <option value="one-way">One-way</option>
+                                            <option value="round-trip">Round-trip</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="flightReturnDate">Return Date</label>
-                                        <input type="date" id="flightReturnDate" name="flightReturnDate">
+                                        <label for="flightClass">Flight Class Preference</label>
+                                        <select id="flightClass" name="flightClass">
+                                            <option value="" selected>Select class</option>
+                                            <option value="economy">Economy</option>
+                                            <option value="premium-economy">Premium Economy</option>
+                                            <option value="business">Business</option>
+                                            <option value="first">First Class</option>
+                                        </select>
                                     </div>
                                 </div>
+
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="departureCity">Departure City/Airport</label>
@@ -270,79 +270,31 @@
                                         <input type="text" id="arrivalCity" name="arrivalCity" list="airportList"
                                             placeholder="e.g., Tokyo (NRT)">
                                     </div>
-
-                                    <!-- Airport Datalist -->
-                                    <datalist id="airportList">
-                                        <!-- Philippines -->
-                                        <option value="Manila (MNL)">
-                                        <option value="Cebu (CEB)">
-                                        <option value="Clark (CRK)">
-                                        <option value="Davao (DVO)">
-                                        <option value="Boracay - Caticlan (MPH)">
-                                        <option value="Palawan - Puerto Princesa (PPS)">
-                                        <option value="Bohol - Panglao (TAG)">
-                                            <!-- Japan -->
-                                        <option value="Tokyo - Narita (NRT)">
-                                        <option value="Tokyo - Haneda (HND)">
-                                        <option value="Osaka - Kansai (KIX)">
-                                        <option value="Nagoya (NGO)">
-                                        <option value="Fukuoka (FUK)">
-                                        <option value="Sapporo (CTS)">
-                                            <!-- South Korea -->
-                                        <option value="Seoul - Incheon (ICN)">
-                                        <option value="Seoul - Gimpo (GMP)">
-                                        <option value="Busan (PUS)">
-                                            <!-- Asia -->
-                                        <option value="Singapore (SIN)">
-                                        <option value="Hong Kong (HKG)">
-                                        <option value="Bangkok - Suvarnabhumi (BKK)">
-                                        <option value="Bangkok - Don Mueang (DMK)">
-                                        <option value="Kuala Lumpur (KUL)">
-                                        <option value="Taipei (TPE)">
-                                        <option value="Vietnam - Ho Chi Minh (SGN)">
-                                        <option value="Vietnam - Hanoi (HAN)">
-                                        <option value="Bali (DPS)">
-                                            <!-- Middle East -->
-                                        <option value="Dubai (DXB)">
-                                        <option value="Abu Dhabi (AUH)">
-                                        <option value="Doha (DOH)">
-                                            <!-- USA & Canada -->
-                                        <option value="Los Angeles (LAX)">
-                                        <option value="San Francisco (SFO)">
-                                        <option value="New York (JFK)">
-                                        <option value="Las Vegas (LAS)">
-                                        <option value="Vancouver (YVR)">
-                                        <option value="Toronto (YYZ)">
-                                            <!-- Europe -->
-                                        <option value="London Heathrow (LHR)">
-                                        <option value="Paris Charles de Gaulle (CDG)">
-                                        <option value="Amsterdam (AMS)">
-                                        <option value="Frankfurt (FRA)">
-                                        <option value="Rome (FCO)">
-                                            <!-- Australia -->
-                                        <option value="Sydney (SYD)">
-                                        <option value="Melbourne (MEL)">
-                                    </datalist>
                                 </div>
 
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="flightClass">Flight Class Preference</label>
-                                        <select id="flightClass" name="flightClass">
-                                            <option value="" selected>Select class</option>
-                                            <option value="economy">Economy</option>
-                                            <option value="premium-economy">Premium Economy</option>
-                                            <option value="business">Business</option>
-                                            <option value="first">First Class</option>
-                                        </select>
+                                        <label for="flightDepartureDate">Departure Date <span
+                                                class="required">*</span></label>
+                                        <input type="date" id="flightDepartureDate" name="flightDepartureDate">
                                     </div>
                                     <div class="form-group">
-                                        <label for="flightType">Trip Type</label>
-                                        <select id="flightType" name="flightType">
-                                            <option value="" selected>Select type</option>
-                                            <option value="one-way">One-way</option>
-                                            <option value="round-trip">Round-trip</option>
-                                        </select>
+                                        <label for="flightReturnDate">Return Date</label>
+                                        <input type="date" id="flightReturnDate" name="flightReturnDate">
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="numAdults_f">Number of Adults <span
+                                                class="required">*</span></label>
+                                        <input type="number" id="numAdults_f" name="numAdults_f" min="1" max="20"
+                                            value="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numChildren_f">Number of Children</label>
+                                        <input type="number" id="numChildren_f" name="numChildren_f" min="0" max="20"
+                                            value="0">
                                     </div>
                                 </div>
 
@@ -353,7 +305,6 @@
                                 </div>
                             </div>
 
-                            <!-- Hotel-Specific Information -->
                             <div id="hotelFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
@@ -405,11 +356,78 @@
                                         placeholder="e.g., City center, near beach">
                                 </div>
 
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="numAdults_h">Number of Adults <span
+                                                class="required">*</span></label>
+                                        <input type="number" id="numAdults_h" name="numAdults_h" min="1" max="20"
+                                            value="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numChildren_h">Number of Children</label>
+                                        <input type="number" id="numChildren_h" name="numChildren_h" min="0" max="20"
+                                            value="0">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="hotelSpecialRequests">Special Requests</label>
                                     <textarea id="hotelSpecialRequests" name="hotelSpecialRequests" rows="2"
                                         placeholder="e.g., Early check-in, late check-out, accessibility requirements"></textarea>
                                 </div>
+
+                                <!-- Airport Datalist (Shared) -->
+                                <datalist id="airportList">
+                                    <!-- Philippines -->
+                                    <option value="Manila (MNL)">
+                                    <option value="Cebu (CEB)">
+                                    <option value="Clark (CRK)">
+                                    <option value="Davao (DVO)">
+                                    <option value="Boracay - Caticlan (MPH)">
+                                    <option value="Palawan - Puerto Princesa (PPS)">
+                                    <option value="Bohol - Panglao (TAG)">
+                                        <!-- Japan -->
+                                    <option value="Tokyo - Narita (NRT)">
+                                    <option value="Tokyo - Haneda (HND)">
+                                    <option value="Osaka - Kansai (KIX)">
+                                    <option value="Nagoya (NGO)">
+                                    <option value="Fukuoka (FUK)">
+                                    <option value="Sapporo (CTS)">
+                                        <!-- South Korea -->
+                                    <option value="Seoul - Incheon (ICN)">
+                                    <option value="Seoul - Gimpo (GMP)">
+                                    <option value="Busan (PUS)">
+                                        <!-- Asia -->
+                                    <option value="Singapore (SIN)">
+                                    <option value="Hong Kong (HKG)">
+                                    <option value="Bangkok - Suvarnabhumi (BKK)">
+                                    <option value="Bangkok - Don Mueang (DMK)">
+                                    <option value="Kuala Lumpur (KUL)">
+                                    <option value="Taipei (TPE)">
+                                    <option value="Vietnam - Ho Chi Minh (SGN)">
+                                    <option value="Vietnam - Hanoi (HAN)">
+                                    <option value="Bali (DPS)">
+                                        <!-- Middle East -->
+                                    <option value="Dubai (DXB)">
+                                    <option value="Abu Dhabi (AUH)">
+                                    <option value="Doha (DOH)">
+                                        <!-- USA & Canada -->
+                                    <option value="Los Angeles (LAX)">
+                                    <option value="San Francisco (SFO)">
+                                    <option value="New York (JFK)">
+                                    <option value="Las Vegas (LAS)">
+                                    <option value="Vancouver (YVR)">
+                                    <option value="Toronto (YYZ)">
+                                        <!-- Europe -->
+                                    <option value="London Heathrow (LHR)">
+                                    <option value="Paris Charles de Gaulle (CDG)">
+                                    <option value="Amsterdam (AMS)">
+                                    <option value="Frankfurt (FRA)">
+                                    <option value="Rome (FCO)">
+                                        <!-- Australia -->
+                                    <option value="Sydney (SYD)">
+                                    <option value="Melbourne (MEL)">
+                                </datalist>
                             </div>
 
                             <!-- Tour-Specific Information -->
@@ -447,6 +465,20 @@
                                     <label for="tourBudget">Estimated Budget (per person)</label>
                                     <input type="text" id="tourBudget" name="tourBudget" placeholder="e.g., ₱20,000">
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="numAdults_t">Number of Adults <span
+                                                class="required">*</span></label>
+                                        <input type="number" id="numAdults_t" name="numAdults_t" min="1" max="20"
+                                            value="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numChildren_t">Number of Children</label>
+                                        <input type="number" id="numChildren_t" name="numChildren_t" min="0" max="20"
+                                            value="0">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="tourSpecialRequests">Additional Details / Requests</label>
                                     <textarea id="tourSpecialRequests" name="tourSpecialRequests" rows="2"
@@ -485,6 +517,20 @@
                                             placeholder="e.g., Caribbean, Mediterranean, Singapore-Malaysia">
                                     </div>
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="numAdults_c">Number of Adults <span
+                                                class="required">*</span></label>
+                                        <input type="number" id="numAdults_c" name="numAdults_c" min="1" max="20"
+                                            value="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numChildren_c">Number of Children</label>
+                                        <input type="number" id="numChildren_c" name="numChildren_c" min="0" max="20"
+                                            value="0">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="cruiseSpecialRequests">Additional Details / Requests</label>
                                     <textarea id="cruiseSpecialRequests" name="cruiseSpecialRequests" rows="2"
@@ -516,6 +562,20 @@
                                     <label for="visaAppointment">Preferred Appointment Date (if applicable)</label>
                                     <input type="date" id="visaAppointment" name="visaAppointment">
                                 </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="numAdults_v">Number of Adults <span
+                                                class="required">*</span></label>
+                                        <input type="number" id="numAdults_v" name="numAdults_v" min="1" max="20"
+                                            value="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="numChildren_v">Number of Children</label>
+                                        <input type="number" id="numChildren_v" name="numChildren_v" min="0" max="20"
+                                            value="0">
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label for="visaSpecialRequests">Additional Details / Requests</label>
                                     <textarea id="visaSpecialRequests" name="visaSpecialRequests" rows="2"
