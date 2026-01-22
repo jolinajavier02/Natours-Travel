@@ -308,16 +308,6 @@
                             <div id="hotelFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="checkInDate">Check-in Date <span class="required">*</span></label>
-                                        <input type="date" id="checkInDate" name="checkInDate">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="checkOutDate">Check-out Date <span class="required">*</span></label>
-                                        <input type="date" id="checkOutDate" name="checkOutDate">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
                                         <label for="roomType">Type of Room</label>
                                         <select id="roomType" name="roomType">
                                             <option value="" selected>Select room type</option>
@@ -338,6 +328,23 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="preferredLocation">Preferred Location</label>
+                                    <input type="text" id="preferredLocation" name="preferredLocation"
+                                        placeholder="e.g., City center, near beach">
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="checkInDate">Check-in Date <span class="required">*</span></label>
+                                        <input type="date" id="checkInDate" name="checkInDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="checkOutDate">Check-out Date <span class="required">*</span></label>
+                                        <input type="date" id="checkOutDate" name="checkOutDate">
+                                    </div>
+                                </div>
+
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="numNights">Number of Nights</label>
@@ -349,11 +356,6 @@
                                         <input type="number" id="numRooms" name="numRooms" min="1"
                                             placeholder="e.g., 1">
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="preferredLocation">Preferred Location</label>
-                                    <input type="text" id="preferredLocation" name="preferredLocation"
-                                        placeholder="e.g., City center, near beach">
                                 </div>
 
                                 <div class="form-row">
@@ -434,11 +436,6 @@
                             <div id="tourFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="tourDate">Preferred Tour Date <span
-                                                class="required">*</span></label>
-                                        <input type="date" id="tourDate" name="tourDate">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="tourType">Tour Type</label>
                                         <select id="tourType" name="tourType">
                                             <option value="" selected>Select tour type</option>
@@ -446,13 +443,6 @@
                                             <option value="group">Group Joiner</option>
                                             <option value="custom">Custom Itinerary</option>
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="tourPackage">Preferred Package / Destination</label>
-                                        <input type="text" id="tourPackage" name="tourPackage"
-                                            placeholder="e.g., El Nido Island Hopping, Japan Golden Route">
                                     </div>
                                     <div class="form-group">
                                         <label for="tourActivities">Activities Desired</label>
@@ -462,9 +452,24 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="tourBudget">Estimated Budget (per person)</label>
-                                    <input type="text" id="tourBudget" name="tourBudget" placeholder="e.g., ₱20,000">
+                                    <label for="tourPackage">Preferred Package / Destination</label>
+                                    <input type="text" id="tourPackage" name="tourPackage"
+                                        placeholder="e.g., El Nido Island Hopping, Japan Golden Route">
                                 </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="tourDate">Preferred Tour Date <span
+                                                class="required">*</span></label>
+                                        <input type="date" id="tourDate" name="tourDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tourBudget">Estimated Budget (per person)</label>
+                                        <input type="text" id="tourBudget" name="tourBudget"
+                                            placeholder="e.g., ₱20,000">
+                                    </div>
+                                </div>
+
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="numAdults_t">Number of Adults <span
@@ -490,18 +495,6 @@
                             <div id="cruiseFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="cruiseDate">Preferred Cruise Date <span
-                                                class="required">*</span></label>
-                                        <input type="date" id="cruiseDate" name="cruiseDate">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cruiseLine">Preferred Cruise Line</label>
-                                        <input type="text" id="cruiseLine" name="cruiseLine"
-                                            placeholder="e.g., Royal Caribbean, Disney Cruise">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group">
                                         <label for="cabinType">Cabin Type</label>
                                         <select id="cabinType" name="cabinType">
                                             <option value="" selected>Select cabin type</option>
@@ -517,6 +510,20 @@
                                             placeholder="e.g., Caribbean, Mediterranean, Singapore-Malaysia">
                                     </div>
                                 </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="cruiseDate">Preferred Cruise Date <span
+                                                class="required">*</span></label>
+                                        <input type="date" id="cruiseDate" name="cruiseDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cruiseLine">Preferred Cruise Line</label>
+                                        <input type="text" id="cruiseLine" name="cruiseLine"
+                                            placeholder="e.g., Royal Caribbean, Disney Cruise">
+                                    </div>
+                                </div>
+
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="numAdults_c">Number of Adults <span
@@ -542,11 +549,6 @@
                             <div id="visaFields" class="conditional-section" style="display:none;">
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="visaCountry">Country Applying For</label>
-                                        <input type="text" id="visaCountry" name="visaCountry"
-                                            placeholder="e.g., Japan, USA, Schengen (France)">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="visaType">Visa Type</label>
                                         <select id="visaType" name="visaType">
                                             <option value="" selected>Select visa type</option>
@@ -557,11 +559,18 @@
                                             <option value="other">Other</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="visaCountry">Country Applying For</label>
+                                        <input type="text" id="visaCountry" name="visaCountry"
+                                            placeholder="e.g., Japan, USA, Schengen (France)">
+                                    </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label for="visaAppointment">Preferred Appointment Date (if applicable)</label>
                                     <input type="date" id="visaAppointment" name="visaAppointment">
                                 </div>
+
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="numAdults_v">Number of Adults <span
