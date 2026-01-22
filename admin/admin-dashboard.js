@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>₱${q.total.toLocaleString()}</td>
                 <td>${new Date(q.validUntil).toLocaleDateString()}</td>
                 <td>
-                    <button class="btn-action" onclick="window.open('../quotation/index.html?id=${q.id}', '_blank')"><i class="fas fa-external-link-alt"></i></button>
+                    <button class="btn-action" onclick="window.open('../../quotation/?id=${q.id}', '_blank')"><i class="fas fa-external-link-alt"></i></button>
                     <button class="btn-action" onclick="deleteQuote('${q.id}')"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>

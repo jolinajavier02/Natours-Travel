@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
         saveQuotation(quotationData);
 
         // Generate link
-        const baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'index.html');
+        const baseUrl = window.location.origin + window.location.pathname.replace('admin/', '');
         const quotationUrl = `${baseUrl}?id=${quotationData.id}`;
 
         quotationLinkInput.value = quotationUrl;
