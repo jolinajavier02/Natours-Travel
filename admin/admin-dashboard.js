@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // State management
     const state = {
         bookings: JSON.parse(localStorage.getItem('all_bookings') || '[]'),
-        quotations: JSON.parse(localStorage.getItem('quotations') || '{}'),
         activeTab: 'overview'
     };
 
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Stats Elements
     const totalBookingsEl = document.getElementById('totalBookingsCount');
-    const totalQuotesEl = document.getElementById('totalQuotesCount');
     const visaRequestsEl = document.getElementById('visaRequestsCount');
     const totalRevenueEl = document.getElementById('totalRevenue');
 
@@ -25,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
         renderStats();
         renderRecentBookings();
         renderAllBookings();
-        renderAllQuotations();
         setupEventListeners();
     }
 
@@ -42,11 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
         // Refresh data
         refreshBtn.addEventListener('click', () => {
             state.bookings = JSON.parse(localStorage.getItem('all_bookings') || '[]');
-            state.quotations = JSON.parse(localStorage.getItem('quotations') || '{}');
             renderStats();
             renderRecentBookings();
             renderAllBookings();
-            renderAllQuotations();
 
             const icon = refreshBtn.querySelector('i');
             icon.classList.add('fa-spin');
@@ -63,15 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             renderBookingsTable('allBookingsTable', filtered);
         });
 
-        document.getElementById('quoteSearch').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const quotesArray = Object.values(state.quotations);
-            const filtered = quotesArray.filter(q =>
-                q.customerName.toLowerCase().includes(term) ||
-                q.id.toLowerCase().includes(term)
-            );
-            renderQuotesTable(filtered);
-        });
+
     }
 
     function switchTab(tabId) {
@@ -89,8 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update Titles
         const titles = {
             overview: ['Dashboard Overview', 'Welcome back, Admin!'],
-            bookings: ['Booking Management', 'Track and manage user bookings'],
-            quotations: ['Quotation Management', 'View and track generated quotes']
+            bookings: ['Booking Management', 'Track and manage user bookings']
         };
 
         [tabTitle.innerText, tabSubtitle.innerText] = titles[tabId];
@@ -98,16 +84,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderStats() {
         const bookings = state.bookings;
-        const quotes = Object.values(state.quotations);
-
         totalBookingsEl.innerText = bookings.length;
-        totalQuotesEl.innerText = quotes.length;
 
         const visaCount = bookings.filter(b => b.serviceType === 'visa').length;
         visaRequestsEl.innerText = visaCount;
 
         // Roughly estimate revenue from paid bookings (mock logic)
-        // In a real app, this would come from the database
         totalRevenueEl.innerText = '₱' + (bookings.length * 5500).toLocaleString();
     }
 
@@ -150,29 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         `).join('');
     }
 
-    function renderAllQuotations() {
-        const quotes = Object.values(state.quotations).reverse();
-        renderQuotesTable(quotes);
-    }
 
-    function renderQuotesTable(data) {
-        const tbody = document.getElementById('allQuotesTable');
-        if (!tbody) return;
-
-        tbody.innerHTML = data.map(q => `
-            <tr>
-                <td><code style="background:#f0f0f0;padding:2px 5px;border-radius:4px">${q.id}</code></td>
-                <td>${q.customerName}</td>
-                <td>${capitalize(q.serviceType)}</td>
-                <td>₱${q.total.toLocaleString()}</td>
-                <td>${new Date(q.validUntil).toLocaleDateString()}</td>
-                <td>
-                    <button class="btn-action" onclick="window.open('../../quotation/?id=${q.id}', '_blank')"><i class="fas fa-external-link-alt"></i></button>
-                    <button class="btn-action" onclick="deleteQuote('${q.id}')"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `).join('');
-    }
 
     function capitalize(s) {
         return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'N/A';
@@ -227,14 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    window.deleteQuote = (id) => {
-        if (confirm('Are you sure you want to delete this quotation?')) {
-            delete state.quotations[id];
-            localStorage.setItem('quotations', JSON.stringify(state.quotations));
-            renderStats();
-            renderAllQuotations();
-        }
-    };
+
 
     // Close Modal
     document.querySelector('.close-modal').onclick = () => {

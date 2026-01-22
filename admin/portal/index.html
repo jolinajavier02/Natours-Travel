@@ -31,13 +31,6 @@
                 <a href="#" class="nav-item" data-tab="bookings">
                     <i class="fas fa-calendar-check"></i> Bookings
                 </a>
-                <a href="#" class="nav-item" data-tab="quotations">
-                    <i class="fas fa-file-invoice-dollar"></i> Quotations
-                </a>
-                <a href="../../quotation/admin/" class="nav-item">
-                    <i class="fas fa-plus-circle"></i> New Quotation
-                </a>
-                <div class="nav-divider"></div>
                 <a href="../../home/index.html" class="nav-item">
                     <i class="fas fa-external-link-alt"></i> View Website
                 </a>
@@ -72,13 +65,7 @@
                                 <p class="stat-value" id="totalBookingsCount">0</p>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon quote"><i class="fas fa-file-invoice"></i></div>
-                            <div class="stat-info">
-                                <h3>Active Quotations</h3>
-                                <p class="stat-value" id="totalQuotesCount">0</p>
-                            </div>
-                        </div>
+
                         <div class="stat-card">
                             <div class="stat-icon visa"><i class="fas fa-passport"></i></div>
                             <div class="stat-info">
@@ -150,34 +137,7 @@
                     </div>
                 </section>
 
-                <!-- Quotations Tab -->
-                <section id="quotationsTab" class="tab-content">
-                    <div class="data-card">
-                        <div class="card-header">
-                            <div class="search-bar">
-                                <i class="fas fa-search"></i>
-                                <input type="text" id="quoteSearch" placeholder="Search quotations...">
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Customer</th>
-                                        <th>Service</th>
-                                        <th>Total</th>
-                                        <th>Valid Until</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="allQuotesTable">
-                                    <!-- Data populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
+
             </div>
         </main>
     </div>
