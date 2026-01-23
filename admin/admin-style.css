@@ -34,8 +34,22 @@
 }
 
 .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.sidebar-logo-img {
     width: 60px;
     height: 60px;
+    filter: brightness(0) invert(1);
+    object-fit: contain;
+}
+
+.sidebar-logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .sidebar-header h2 {
