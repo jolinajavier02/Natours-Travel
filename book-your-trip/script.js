@@ -235,6 +235,45 @@ document.addEventListener('DOMContentLoaded', function () {
             travelersDropdown.classList.remove('active');
         }
     });
+
+    // Handle "Select This Package" buttons
+    const packageButtons = document.querySelectorAll('.btn-select-package');
+    packageButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const service = this.getAttribute('data-service');
+            const destination = this.getAttribute('data-destination');
+            const pkgName = this.getAttribute('data-package');
+
+            // 1. Set Service Type
+            if (serviceTypeSelect) {
+                serviceTypeSelect.value = service;
+                // Trigger change event to show correct fields
+                serviceTypeSelect.dispatchEvent(new Event('change'));
+            }
+
+            // 2. Set Destination (General field)
+            const destInput = document.getElementById('destination');
+            if (destInput) destInput.value = destination;
+
+            // 3. Set Specific Fields based on service
+            if (service === 'tour') {
+                const tourPkgInput = document.getElementById('tourPackage');
+                if (tourPkgInput) tourPkgInput.value = pkgName;
+            } else if (service === 'cruise') {
+                const cruiseDestInput = document.getElementById('cruiseDestination');
+                if (cruiseDestInput) cruiseDestInput.value = destination;
+            } else if (service === 'hotel') {
+                const prefLocInput = document.getElementById('preferredLocation');
+                if (prefLocInput) prefLocInput.value = destination;
+            }
+
+            // 4. Scroll to form
+            const formSection = document.getElementById('bookingForm');
+            if (formSection) {
+                formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
 });
 
 // Global function for traveler updates
