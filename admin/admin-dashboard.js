@@ -102,24 +102,39 @@ document.addEventListener('DOMContentLoaded', function () {
     function switchTab(tabId) {
         state.activeTab = tabId;
 
-        // Update UI
+        // Update UI Sidebars
         tabButtons.forEach(btn => {
             btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
         });
 
+        // Determine Content Section
+        let contentId = 'bookingsTab'; // Default for sub-categories
+        if (tabId === 'overview') contentId = 'overviewTab';
+        if (tabId === 'messages') contentId = 'messagesTab';
+
+        // Hide all, show target
         tabContents.forEach(content => {
-            content.classList.toggle('active', content.id === `${tabId}Tab`);
+            content.classList.toggle('active', content.id === contentId);
         });
 
         // Update Titles
         const titles = {
             overview: ['Dashboard Overview', 'Welcome back, Admin!'],
-            bookings: ['Booking Management', 'Track and manage user bookings'],
+            bookings: ['All Bookings', 'Manage all travel reservations'],
+            flight: ['Flight Bookings', 'Manage flight reservations'],
+            hotel: ['Hotel Bookings', 'Manage hotel & stay reservations'],
+            tour: ['Tour Packages', 'Manage tour bookings'],
+            cruise: ['Cruise Bookings', 'Manage cruise reservations'],
             messages: ['Message Center', 'View and reply to customer inquiries']
         };
 
         if (titles[tabId]) {
             [tabTitle.innerText, tabSubtitle.innerText] = titles[tabId];
+        }
+
+        // Re-render table if showing bookings
+        if (contentId === 'bookingsTab') {
+            renderAllBookings();
         }
     }
 
@@ -140,7 +155,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function renderAllBookings() {
-        renderBookingsTable('allBookingsTable', [...state.bookings].reverse());
+        const data = filterBookingsByTab();
+        renderBookingsTable('allBookingsTable', data);
     }
 
     function renderMessages() {
@@ -152,29 +168,63 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!tbody) return;
 
         if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No records found</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No records found</td></tr>';
             return;
         }
 
-        tbody.innerHTML = data.map(b => `
+        tbody.innerHTML = data.map(b => {
+            // Status Badge Color
+            let statusClass = 'status-pending';
+            if (b.status === 'Confirmed') statusClass = 'status-paid'; // reusing paid style
+            if (b.status === 'Completed') statusClass = 'status-completed';
+
+            // Payment Column
+            const paymentDisplay = isCompact ? (b.payment_method || 'N/A') : `
+                <div style="font-weight:600">${b.payment_method || 'N/A'}</div>
+                <div style="font-size:0.75rem;color:#555;font-family:monospace;margin-top:2px;" title="Reference Number">
+                   Ref: ${b.reference_number || 'N/A'}
+                </div>
+            `;
+
+            // Customer Column (Enhanced)
+            const customerDisplay = `
+                <div style="font-weight:600; cursor:pointer;" onclick="filterByUser('${b.email}')" title="Filter by this user">${b.firstName} ${b.lastName}</div>
+                <div style="font-size:0.8rem;color:#888">${b.email}</div>
+            `;
+
+            // Status Column with Action (for full table)
+            const statusDisplay = isCompact ?
+                `<span class="status-badge ${statusClass}">${b.status || 'Pending'}</span>` :
+                `<select onchange="updateStatus('${b.booking_id}', this.value)" style="padding:4px;border-radius:12px;border:1px solid #ddd;font-size:0.8rem;background:${getStatusColor(b.status)}">
+                    <option value="Pending" ${b.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                    <option value="Confirmed" ${b.status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
+                    <option value="Completed" ${b.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                    <option value="Cancelled" ${b.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                 </select>`;
+
+            return `
             <tr>
                 <td>${new Date(b.submitted_at || Date.now()).toLocaleDateString()}</td>
-                <td>
-                    <div style="font-weight:600">${b.firstName} ${b.lastName}</div>
-                    <div style="font-size:0.8rem;color:#888">${b.email}</div>
-                </td>
+                <td>${customerDisplay}</td>
                 <td><span class="service-type-tag">${capitalize(b.serviceType)}</span></td>
                 ${isCompact ? '' : `<td>${b.destination || 'N/A'}</td>`}
-                ${isCompact ? '' : `<td>${b.payment_method || 'N/A'}</td>`}
-                <td><span class="status-badge status-pending">Pending</span></td>
+                <td>${paymentDisplay}</td>
+                <td>${statusDisplay}</td>
                 ${isCompact ? '' : `
                 <td>
-                    <button class="btn-action" onclick="viewBookingDetail('${b.booking_id}')"><i class="fas fa-eye"></i></button>
-                    <button class="btn-action" onclick="deleteBooking('${b.booking_id}')"><i class="fas fa-trash"></i></button>
+                    <button class="btn-action" onclick="viewBookingDetail('${b.booking_id}')" title="View Details"><i class="fas fa-eye"></i></button>
+                    <button class="btn-action" onclick="deleteBooking('${b.booking_id}')" title="Delete Record"><i class="fas fa-trash"></i></button>
                 </td>
                 `}
             </tr>
-        `).join('');
+        `}).join('');
+    }
+
+    function getStatusColor(status) {
+        if (status === 'Confirmed') return '#d4edda';
+        if (status === 'Completed') return '#cce5ff';
+        if (status === 'Cancelled') return '#f8d7da';
+        return '#fff3cd'; // Pending
     }
 
     function renderMessagesTable(data) {
@@ -208,37 +258,64 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Global actions for onclick
+    window.updateStatus = (id, newStatus) => {
+        const booking = state.bookings.find(b => b.booking_id === id);
+        if (booking) {
+            booking.status = newStatus;
+            localStorage.setItem('all_bookings', JSON.stringify(state.bookings));
+            renderAllBookings(); // re-render to update color
+            renderRecentBookings();
+        }
+    };
+
+    window.filterByUser = (email) => {
+        const searchInput = document.getElementById('bookingSearch');
+        if (searchInput) {
+            searchInput.value = email;
+            searchInput.dispatchEvent(new Event('input'));
+            switchTab('bookings'); // Switch to main tab to see results
+        }
+    };
+
     window.viewBookingDetail = (id) => {
         const booking = state.bookings.find(b => b.booking_id === id);
         if (!booking) return;
 
         const modal = document.getElementById('bookingModal');
         const content = document.getElementById('bookingDetailContent');
+        const status = booking.status || 'Pending';
 
         content.innerHTML = `
-            <h2 style="margin-bottom:1.5rem;color:var(--primary-color)">Booking Details: ${id}</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+                <h2 style="margin:0;color:var(--primary-color)">Booking Details</h2>
+                <span class="status-badge" style="background:${getStatusColor(status)};font-size:1rem">${status}</span>
+            </div>
+            
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
                 <div>
-                    <h4 style="border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:10px">Customer</h4>
+                    <h4 style="border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:10px">Customer Profile</h4>
                     <p><strong>Name:</strong> ${booking.firstName} ${booking.lastName}</p>
                     <p><strong>Email:</strong> ${booking.email}</p>
                     <p><strong>Phone:</strong> ${booking.phone}</p>
                 </div>
                 <div>
-                    <h4 style="border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:10px">Trip</h4>
+                    <h4 style="border-bottom:1px solid #eee;padding-bottom:5px;margin-bottom:10px">Trip Details</h4>
                     <p><strong>Service:</strong> ${capitalize(booking.serviceType)}</p>
                     <p><strong>Destination:</strong> ${booking.destination}</p>
                     <p><strong>Travelers:</strong> ${booking.numAdults} Adults, ${booking.numChildren} Children</p>
                 </div>
             </div>
             <div style="margin-top:20px;padding:15px;background:#f9f9f9;border-radius:8px">
-                <h4 style="margin-bottom:10px">Payment Information</h4>
-                <p><strong>Method:</strong> ${booking.payment_method}</p>
-                <p><strong>Reference:</strong> ${booking.reference_number}</p>
-                <p><strong>Account:</strong> ${booking.account_name}</p>
+                <h4 style="margin-bottom:10px">Payment Verification</h4>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                    <p><strong>Method:</strong> ${booking.payment_method}</p>
+                    <p><strong>Reference No:</strong> <span style="font-family:monospace;background:#fff;padding:2px 5px;border:1px solid #ccc;border-radius:4px">${booking.reference_number}</span></p>
+                    <p><strong>Account Name:</strong> ${booking.account_name}</p>
+                    <p><strong>Date Submitted:</strong> ${new Date(booking.submitted_at).toLocaleString()}</p>
+                </div>
             </div>
             <div style="margin-top:20px">
-                 <h4 style="margin-bottom:10px">Additional Details</h4>
+                 <h4 style="margin-bottom:10px">Additional Notes</h4>
                  <p style="white-space:pre-line;color:#666">${booking.additionalDetails || 'No additional notes provided.'}</p>
             </div>
         `;
