@@ -403,3 +403,41 @@ if (document.readyState === 'loading') {
     initChecklistGenerator();
 }
 
+// Contact Form Handler
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+        const messageData = {
+            id: 'MSG-' + Date.now().toString(36).toUpperCase(),
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            subject: formData.get('subject'),
+            message: formData.get('message'),
+            date: new Date().toISOString(),
+            status: 'Unread'
+        };
+
+        // Save to localStorage
+        const messages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
+        messages.push(messageData);
+        localStorage.setItem('contact_messages', JSON.stringify(messages));
+
+        // Simulate network delay
+        setTimeout(() => {
+            alert('Message sent successfully! We will get back to you soon.');
+            contactForm.reset();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }, 1000);
+    });
+}
+

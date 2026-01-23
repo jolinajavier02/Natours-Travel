@@ -31,6 +31,9 @@
                 <a href="#" class="nav-item" data-tab="bookings">
                     <i class="fas fa-calendar-check"></i> Bookings
                 </a>
+                <a href="#" class="nav-item" data-tab="messages">
+                    <i class="fas fa-envelope"></i> Messages
+                </a>
                 <a href="../../home/index.html" class="nav-item">
                     <i class="fas fa-external-link-alt"></i> View Website
                 </a>
@@ -137,6 +140,34 @@
                     </div>
                 </section>
 
+                <!-- Messages Tab -->
+                <section id="messagesTab" class="tab-content">
+                    <div class="data-card">
+                        <div class="card-header">
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="messageSearch" placeholder="Search messages...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Sender</th>
+                                        <th>Subject</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="messagesTable">
+                                    <!-- Data populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
 
             </div>
         </main>
@@ -145,8 +176,23 @@
     <!-- Booking Detail Modal -->
     <div id="bookingModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <span class="close-modal" data-modal="bookingModal">&times;</span>
             <div id="bookingDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" data-modal="messageModal">&times;</span>
+            <div id="messageDetailContent"></div>
+            <div style="margin-top: 20px; text-align: right;">
+                <textarea id="replyText" placeholder="Type your reply here..." rows="4"
+                    style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea>
+                <button id="sendReplyBtn" class="btn-refresh" style="background: var(--primary-color); color: white;">
+                    <i class="fas fa-paper-plane"></i> Send Reply
+                </button>
+            </div>
         </div>
     </div>
 
