@@ -2,7 +2,7 @@
 :root {
     --sidebar-width: 260px;
     --header-height: 80px;
-    --sidebar-bg: #1a1a1a;
+    --sidebar-bg: #09713D;
     --content-bg: #f4f7f6;
     --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
@@ -30,32 +30,41 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-logo {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
 }
 
 .sidebar-logo-img {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     filter: brightness(0) invert(1);
     object-fit: contain;
+}
+
+/* Match HTML img.sidebar-logo selector */
+img.sidebar-logo {
+    width: 40px;
+    height: 40px;
+    filter: brightness(0) invert(1);
 }
 
 .sidebar-logo-text {
     font-size: 1.5rem;
     font-weight: 700;
+    color: white;
 }
 
 .sidebar-header h2 {
     font-size: 1.2rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: white;
+    margin: 0;
 }
 
 .sidebar-nav {
@@ -68,7 +77,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem 2rem;
-    color: #a0a0a0;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     transition: all 0.3s;
     border-left: 4px solid transparent;
@@ -79,14 +88,14 @@
 }
 
 .nav-item:hover {
-    background-color: #2a2a2a;
+    background-color: rgba(0, 0, 0, 0.1);
     color: white;
 }
 
 .nav-item.active {
-    background-color: #2a2a2a;
+    background-color: rgba(0, 0, 0, 0.2);
     color: white;
-    border-left-color: var(--primary-color);
+    border-left-color: #ffffff;
 }
 
 .nav-divider {
