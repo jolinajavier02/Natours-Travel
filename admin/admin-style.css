@@ -389,3 +389,32 @@ img.sidebar-logo {
     cursor: pointer;
     color: #888;
 }
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: none;
+    border: 1px solid #ddd;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #666;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover {
+    background: #f0f0f0;
+    color: var(--primary-color);
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
