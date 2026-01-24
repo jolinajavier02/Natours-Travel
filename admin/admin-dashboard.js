@@ -5,8 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
         bookings: JSON.parse(localStorage.getItem('all_bookings') || '[]'),
         messages: JSON.parse(localStorage.getItem('contact_messages') || '[]'),
         activeTab: 'overview',
-        activeFilter: 'all'
+        activeFilter: 'all',
+        lastMessageCount: 0,
+        currentMessageId: null
     };
+
+    // Initialize last message count to avoid instant notification on load
+    state.lastMessageCount = state.messages.length;
 
     // DOM Elements
     const tabButtons = document.querySelectorAll('.nav-item[data-tab]');
@@ -23,7 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialize
     function init() {
-        refreshData();
+        renderStats();
+        renderRecentBookings();
+        renderFilteredBookings(); // Uses activeFilter
+        renderMessages();
         setupEventListeners();
 
         // Polling for auto-refresh (Real-time effect)
@@ -35,7 +43,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const newBookings = JSON.parse(localStorage.getItem('all_bookings') || '[]');
         const newMessages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
 
-        // Simple check to avoid re-rendering if nothing changed (optional optimization, skipped for simplicity)
+        // Check for new messages
+        if (newMessages.length > state.lastMessageCount) {
+            const diff = newMessages.length - state.lastMessageCount;
+            showNotification('New Message Received', `You have ${diff} new inquiry.`);
+            state.lastMessageCount = newMessages.length;
+        }
+
+        // Update State
         state.bookings = newBookings;
         state.messages = newMessages;
 
@@ -43,6 +58,29 @@ document.addEventListener('DOMContentLoaded', function () {
         renderRecentBookings();
         renderFilteredBookings(); // Uses activeFilter
         renderMessages();
+    }
+
+    function showNotification(title, message) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast new-message';
+        toast.innerHTML = `
+            <div style="font-size: 1.5rem; color: #007bff;"><i class="fas fa-bell"></i></div>
+            <div class="toast-content">
+                <h4>${title}</h4>
+                <p>${message}</p>
+            </div>
+        `;
+
+        container.appendChild(toast);
+
+        // Remove after 5 seconds
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
     }
 
     function setupEventListeners() {
@@ -102,9 +140,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                alert('Reply sent successfully! (Simulated)');
+                if (state.currentMessageId) {
+                    // Update Message in Local Storage
+                    const msgIndex = state.messages.findIndex(m => m.id === state.currentMessageId);
+                    if (msgIndex !== -1) {
+                        state.messages[msgIndex].reply = replyText;
+                        state.messages[msgIndex].status = 'Replied';
+                        state.messages[msgIndex].repliedAt = new Date().toISOString();
+
+                        localStorage.setItem('contact_messages', JSON.stringify(state.messages));
+
+                        showNotification('Reply Sent', 'Message status updated to Replied.');
+                        refreshData();
+                    }
+                }
+
                 document.getElementById('replyText').value = '';
                 document.getElementById('messageModal').style.display = 'none';
+                state.currentMessageId = null;
             });
         }
     }
@@ -299,6 +352,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const message = state.messages.find(m => m.id === id);
         if (!message) return;
 
+        state.currentMessageId = id; // Track ID for replying
+
         const modal = document.getElementById('messageModal');
         const content = document.getElementById('messageDetailContent');
 
@@ -312,6 +367,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        // Show previous reply if exists
+        const replyHtml = message.reply ?
+            `<div style="margin-top:15px;padding:10px;background:#e8f5e9;border-left:4px solid var(--primary-color);border-radius:4px;">
+                <strong>Admin Reply:</strong>
+                <p style="margin:5px 0;">${message.reply}</p>
+                <small style="color:#666">Sent on ${new Date(message.repliedAt || Date.now()).toLocaleString()}</small>
+             </div>` : '';
+
         content.innerHTML = `
             <h2 style="margin-bottom:1.5rem;color:var(--primary-color)">Message Details</h2>
             <div style="background:#f9f9f9;padding:15px;border-radius:8px;margin-bottom:20px;">
@@ -323,9 +386,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <div style="padding:15px;border:1px solid #eee;border-radius:8px;min-height:100px;">
                 <p style="white-space:pre-line;">${message.message}</p>
             </div>
+            ${replyHtml}
         `;
 
-        // Clear previous reply text
+        // Clear previous reply text (unless you want to allow multiple replies, but usually one is enough for simple sys)
         document.getElementById('replyText').value = '';
         modal.style.display = 'block';
     };
