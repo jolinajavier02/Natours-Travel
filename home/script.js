@@ -404,40 +404,58 @@ if (document.readyState === 'loading') {
 }
 
 // Contact Form Handler
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-        e.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("Initializing Contact Form Handler...");
+    const contactForm = document.getElementById('contactForm');
 
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
-        submitBtn.disabled = true;
+    if (contactForm) {
+        console.log("Contact form found, attaching listener.");
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log("Form submitted.");
 
-        const formData = new FormData(this);
-        const messageData = {
-            id: 'MSG-' + Date.now().toString(36).toUpperCase(),
-            name: formData.get('name'),
-            email: formData.get('email'),
-            phone: formData.get('phone'),
-            subject: formData.get('subject'),
-            message: formData.get('message'),
-            date: new Date().toISOString(),
-            status: 'Unread'
-        };
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
 
-        // Save to localStorage
-        const messages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
-        messages.push(messageData);
-        localStorage.setItem('contact_messages', JSON.stringify(messages));
+            const formData = new FormData(this);
+            const messageData = {
+                id: 'MSG-' + Date.now().toString(36).toUpperCase(),
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                subject: formData.get('subject'),
+                message: formData.get('message'),
+                date: new Date().toISOString(),
+                status: 'Unread'
+            };
 
-        // Simulate network delay
-        setTimeout(() => {
-            alert('Message sent successfully! We will get back to you soon.');
-            contactForm.reset();
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        }, 1000);
-    });
-}
+            console.log("Saving message:", messageData);
+
+            try {
+                // Save to localStorage
+                const messages = JSON.parse(localStorage.getItem('contact_messages') || '[]');
+                messages.push(messageData);
+                localStorage.setItem('contact_messages', JSON.stringify(messages));
+                console.log("Message saved to localStorage.");
+
+                // Simulate network delay
+                setTimeout(() => {
+                    alert('Message sent successfully! It should now appear in the Admin Dashboard.');
+                    contactForm.reset();
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 1000);
+            } catch (err) {
+                console.error("Error saving message:", err);
+                alert("Error saving message. Please check console.");
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    } else {
+        console.error("Contact form element not found in DOM.");
+    }
+});
 
