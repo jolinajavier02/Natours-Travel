@@ -212,7 +212,7 @@ function generateChecklist() {
             <h4>Before You Arrive</h4>`;
 
         // Entry & Documents
-        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Entry & Documents</h5>
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: #0a8547;">Entry & Documents</h5>
             <ul class="checklist-items">`;
         countryInfo.beforeArrival.entryDocuments.forEach(item => {
             html += `<li>${item}</li>`;
@@ -220,7 +220,7 @@ function generateChecklist() {
         html += `</ul>`;
 
         // Health & Safety
-        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Health & Safety</h5>
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: #0a8547;">Health & Safety</h5>
             <ul class="checklist-items">`;
         countryInfo.beforeArrival.healthSafety.forEach(item => {
             html += `<li>${item}</li>`;
@@ -228,7 +228,7 @@ function generateChecklist() {
         html += `</ul>`;
 
         // Money & Payments
-        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Money & Payments</h5>
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: #0a8547;">Money & Payments</h5>
             <ul class="checklist-items">`;
         countryInfo.beforeArrival.moneyPayments.forEach(item => {
             html += `<li>${item}</li>`;
@@ -236,7 +236,7 @@ function generateChecklist() {
         html += `</ul>`;
 
         // Connectivity
-        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Connectivity</h5>
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: #0a8547;">Connectivity</h5>
             <ul class="checklist-items">`;
         countryInfo.beforeArrival.connectivity.forEach(item => {
             html += `<li>${item}</li>`;
@@ -244,7 +244,7 @@ function generateChecklist() {
         html += `</ul>`;
 
         // Arrival & Customs
-        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: var(--primary-dark);">Arrival & Customs</h5>
+        html += `<h5 style="margin-top: 1.5rem; margin-bottom: 0.8rem; color: #0a8547;">Arrival & Customs</h5>
             <ul class="checklist-items">`;
         countryInfo.beforeArrival.arrivalCustoms.forEach(item => {
             html += `<li>${item}</li>`;
