@@ -95,37 +95,10 @@ sliderConfigs.forEach(config => {
 // Checklist Generator Functionality
 // countryData is now loaded from country_data.js
 
+// Generate Checklist Function using local country data
+function generateChecklist() {
+    console.log('generateChecklist called');
 
-// Generate Checklist Function
-// Helper to load .env variables (simulated for frontend)
-async function getEnvVariable(key) {
-    try {
-        const response = await fetch('/.env');
-        const text = await response.text();
-        const lines = text.split('\n');
-        for (const line of lines) {
-            const [k, v] = line.split('=');
-            if (k.trim() === key) return v.trim();
-        }
-    } catch (e) {
-        console.error('Error loading .env:', e);
-    }
-    return null;
-}
-
-// Helper to load prompt template
-async function getPromptTemplate() {
-    try {
-        const response = await fetch('/prompt.txt');
-        return await response.text();
-    } catch (e) {
-        console.error('Error loading prompt.txt:', e);
-        return null;
-    }
-}
-
-// Generate Checklist Function using Gemini API
-async function generateChecklist() {
     const originSelect = document.getElementById('origin-country');
     const destinationSelect = document.getElementById('destination-country');
     const checklistDisplay = document.getElementById('checklist-display');
@@ -133,61 +106,46 @@ async function generateChecklist() {
     const checklistContent = document.getElementById('checklist-content');
     const generateBtn = document.getElementById('generate-checklist-btn');
 
+    if (!originSelect || !destinationSelect) {
+        console.error('Select elements not found');
+        alert('Error: Form elements not found. Please refresh the page.');
+        return;
+    }
+
     const origin = originSelect.value;
     const destination = destinationSelect.value;
+
+    console.log('Origin:', origin, 'Destination:', destination);
 
     if (!origin || !destination) {
         alert('Please select both origin and destination countries.');
         return;
     }
 
-    const originName = originSelect.options[originSelect.selectedIndex].text;
-    const destinationName = destinationSelect.options[destinationSelect.selectedIndex].text;
+    // Check if countryData exists
+    if (typeof countryData === 'undefined') {
+        console.error('countryData is not loaded');
+        alert('Error: Country data not loaded. Please refresh the page.');
+        return;
+    }
+
+    // Get country info from local data
+    const countryInfo = countryData[destination];
+
+    if (!countryInfo) {
+        console.error('Country data not found for:', destination);
+        alert('Sorry, data for this destination is not available yet.');
+        return;
+    }
+
+    console.log('Country info found:', countryInfo);
 
     // Show loading state
     const originalBtnText = generateBtn.textContent;
     generateBtn.textContent = 'Generating...';
     generateBtn.disabled = true;
-    checklistDisplay.style.display = 'none';
 
     try {
-        const apiKey = await getEnvVariable('GEMINI_API_KEY');
-        const promptTemplate = await getPromptTemplate();
-
-        if (!apiKey || !promptTemplate) {
-            throw new Error('API Key or Prompt Template missing. Please check .env and prompt.txt');
-        }
-
-        const prompt = promptTemplate
-            .replace('{origin}', originName)
-            .replace('{destination}', destinationName)
-            .replace('{origin_code}', origin);
-
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Gemini API Error:', errorData);
-            throw new Error(`Gemini API error: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const resultText = data.candidates[0].content.parts[0].text;
-
-        // Clean the result text in case Gemini adds markdown code blocks
-        const cleanJson = resultText.replace(/```json\n?|\n?```/g, '').trim();
-        const countryInfo = JSON.parse(cleanJson);
-
         // Update title
         checklistTitle.textContent = `Pre-Arrival Checklist for ${countryInfo.name}`;
 
@@ -362,9 +320,11 @@ async function generateChecklist() {
             checklistDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
 
+        console.log('Checklist generated successfully');
+
     } catch (error) {
         console.error('Error generating checklist:', error);
-        alert('Failed to generate checklist. Please try again later.');
+        alert('Failed to generate checklist. Error: ' + error.message);
     } finally {
         generateBtn.textContent = originalBtnText;
         generateBtn.disabled = false;
