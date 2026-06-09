@@ -1,55 +1,73 @@
 # Natours Travel & Tour Services
 
-A modern, AI-powered travel agency website featuring a dynamic checklist generator and interactive destination guides.
+A Vite-powered static multi-page travel agency website for Natours Travel, deployed at `https://natours-travel.com`.
 
-## 🚀 Features
+## Features
 
-- **AI Travel Checklist Generator**: Uses Google Gemini API to generate real-time, comprehensive travel checklists tailored to your origin and destination.
-- **Interactive Destination Guides**: Detailed information on popular travel spots.
-- **Modern Responsive Design**: Premium aesthetics with smooth animations and mobile-friendly layouts.
-- **Dynamic Image Sliders**: Showcasing flights, hotels, tours, and more.
+- Responsive landing page with travel service previews.
+- Services, guidelines, booking, contact, about, legal, quotation, and admin pages.
+- Static travel checklist data in `public/src/data/country_data.js`.
+- Booking and contact flows powered by client-side JavaScript and EmailJS.
+- SEO files for the live domain: `CNAME`, `robots.txt`, and `sitemap.xml`.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Frontend**: HTML5, Vanilla CSS3, JavaScript (ES6+)
-- **AI Integration**: Google Gemini 1.5 Flash API
-- **Icons**: Font Awesome
-- **Fonts**: Google Fonts (Inter, Roboto, Outfit)
+- Vite
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- EmailJS
+- Google Fonts and Font Awesome
 
-## ⚙️ Setup & Installation
+## Run Locally
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/jolinajavier02/Natours-Travel.git
-   cd Natours-Travel
-   ```
+Install dependencies once, then run the Vite dev server:
 
-2. **Configure Environment Variables**:
-   Create a `.env` file in the root directory and add your Gemini API Key:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   ```
+```bash
+npm install
+npm run dev
+```
 
-3. **Configure Prompt Template**:
-   Ensure `prompt.txt` exists in the root directory with the desired AI instructions.
+Then open the local URL shown in the terminal.
 
-4. **Run Locally**:
-   Since the application uses `fetch` to load configuration files, it must be served via a web server.
-   ```bash
-   # Using Python
-   python3 -m http.server 8000
-   ```
-   Then open `http://localhost:8000` in your browser.
+## Project Structure
 
-## 📂 Project Structure
+```text
+.
+├── index.html              # Root redirect to /home/
+├── package.json            # Vite scripts
+├── vite.config.js          # Vite config
+├── CNAME                   # Live custom domain source copy
+├── robots.txt              # Search crawler rules source copy
+├── sitemap.xml             # Live sitemap source copy
+├── public/                 # Files served directly by Vite
+│   ├── pages/              # Real page files
+│   ├── home/               # Compatibility redirect to /pages/home/
+│   ├── services/           # Compatibility redirect to /pages/services/
+│   ├── guidelines/         # Compatibility redirect to /pages/guidelines/
+│   ├── book-your-trip/     # Compatibility redirect to /pages/book-your-trip/
+│   ├── contact/            # Compatibility redirect to /pages/contact/
+│   ├── about-us/           # Compatibility redirect to /pages/about-us/
+│   ├── legal/              # Compatibility redirect to /pages/legal/
+│   ├── quotation/          # Compatibility redirect to /pages/quotation/
+│   ├── admin/              # Compatibility redirect to /pages/admin/
+│   ├── destinations/       # Compatibility redirect to /pages/destinations/
+│   ├── src/                # Browser-served shared assets
+│   │   ├── assets/images/
+│   │   ├── data/
+│   │   ├── scripts/
+│   │   └── styles/
+│   ├── CNAME
+│   ├── robots.txt
+│   └── sitemap.xml
+└── src/                    # Vite entry source
+    └── main.js
+```
 
-- `/home`: Main landing page and core logic.
-- `/guidelines`: Travel guidelines and information.
-- `/book-your-trip`: Booking interface.
-- `/services`: Details on offered travel services.
-- `country_data.js`: Fallback/static travel data.
-- `script.js`: Main application logic and AI integration.
+## Deployment Notes
 
-## 📄 License
+Keep `CNAME`, `robots.txt`, `sitemap.xml`, and `.nojekyll` in `public/` so they are copied into `dist/` during build. Public route folders use redirect `index.html` files so clean URLs like `/home`, `/services`, and `/book-your-trip` continue to work.
+
+## License
 
 © 2025 Natours-Travel-And-Tour-Services. All rights reserved.

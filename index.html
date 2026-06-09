@@ -7,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting to Natours Travel...</title>
     <script>
-        window.location.href = "/home/";
+        window.location.replace('/home/' + window.location.search + window.location.hash);
     </script>
+    <script type="module" src="/src/main.js"></script>
 </head>
 
 <body>

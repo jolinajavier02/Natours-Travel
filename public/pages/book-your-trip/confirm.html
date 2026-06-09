@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking & Secure Payment - Natours Travel</title>
+    <link rel="stylesheet" href="/src/styles/book-your-trip.css">
+    <link rel="icon" type="image/png" href="/src/assets/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init({
+                publicKey: "r3zhCF9T2VEWag5c4",
+            });
+        })();
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #09713D;
+            --primary-dark: #0a8547;
+            --gcash-blue: #0159E1;
+            --maya-green: #29AC81;
+            --error-red: #dc3545;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f4f7f6;
+            padding-top: 40px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .required {
+            color: var(--error-red);
+            font-weight: bold;
+            margin-left: 2px;
+        }
+
+        .booking-confirm-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 1rem;
+        }
+
+        /* Summary Section */
+        .summary-wrapper {
+            background: #fafafa;
+            padding: 1.8rem;
+            border-radius: 18px;
+            border: 1px solid #eee;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .summary-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .summary-item .label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .summary-item .value {
+            font-weight: 600;
+            text-align: right;
+            color: #1a1a1a;
+        }
+
+        .total-box {
+            margin-top: 2rem;
+            padding: 1.8rem;
+            background: linear-gradient(135deg, #e8f5e9, #f1fcf4);
+            border: 1px solid #c8e6c9;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-box span:first-child {
+            font-weight: 600;
+            color: #444;
+        }
+
+        .total-box span:last-child {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+        }
+
+        /* Anti-Fraud Box */
+        .fraud-warning {
+            background: #fff5f5;
+            border: 1px solid #ffdada;
+            border-left: 5px solid var(--error-red);
+            padding: 1.2rem;
+            margin-top: 2rem;
+            border-radius: 8px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .fraud-warning i {
+            color: var(--error-red);
+            font-size: 1.3rem;
+            margin-top: 2px;
+        }
+
+        .fraud-warning div h4 {
+            color: #912d2b;
+            margin: 0 0 5px 0;
+            font-size: 0.95rem;
+        }
+
+        .fraud-warning div p {
+            font-size: 0.85rem;
+            color: #b54d4b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Payment Section */
+        .qr-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .qr-box {
+            background: white;
+            border: 2px solid #efefef;
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .qr-box:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .qr-box img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+        }
+
+        .qr-label {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .bank-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #eee;
+        }
+
+        .bank-info h4 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .bank-info p {
+            margin: 4px 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(9, 113, 61, 0.1);
+        }
+
+        .validation-msg {
+            font-size: 0.8rem;
+            margin-top: 6px;
+            display: block;
+        }
+
+        .validation-msg.error {
+            color: var(--error-red);
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: #ddd;
+            color: #888;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: not-allowed;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-submit.ready {
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(9, 113, 61, 0.3);
+        }
+
+        .btn-submit.ready:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 900px) {
+            .booking-confirm-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="booking-confirm-container">
+        <!-- Left: Summary -->
+        <div class="card">
+            <h2><i class="fas fa-clipboard-check"></i> Final Booking Summary</h2>
+            <div class="summary-wrapper" id="summaryBox">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="total-box">
+                <span>Total Amount Due:</span>
+                <span id="totalDisplay">₱5,500.00</span>
+            </div>
+
+            <div class="fraud-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <h4>Attention: Identity & Payment Verification</h4>
+                    <p>Natours Travel cross-checks every Reference ID manually with bank records. Providing a fake Ref
+                        No. or tampered receipt is considered fraud and will result in immediate disqualification of
+                        your booking.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Payment -->
+        <div class="card">
+            <h2><i class="fas fa-shield-alt"></i> Secure Payment Portal</h2>
+
+            <div class="qr-section">
+                <div class="qr-box">
+                    <img src="/src/assets/images/gcash-qr.png" alt="GCash">
+                    <div class="qr-label" style="color:var(--gcash-blue)">GCASH</div>
+                    <div style="font-size:0.8rem; color:#666">09369418559</div>
+                </div>
+                <div class="qr-box">
+                    <img src="/src/assets/images/maya-qr.png" alt="Maya">
+                    <div class="qr-label" style="color:var(--maya-green)">MAYA</div>
+                    <div style="font-size:0.8rem; color:#666">09369418559</div>
+                </div>
+            </div>
+
+            <div class="bank-info">
+                <h4><i class="fas fa-university"></i> BDO Unibank (Bank Transfer)</h4>
+                <p><strong>Account Name:</strong> Natours Travel Services</p>
+                <p><strong>Account Number:</strong> 1234-5678-9012</p>
+            </div>
+
+            <form id="finalPaymentForm">
+                <div class="form-group">
+                    <label>Selected Payment Method <span class="required">*</span></label>
+                    <select id="payMethod" required>
+                        <option value="">-- Choose Method --</option>
+                        <option value="GCash">GCash</option>
+                        <option value="Maya">Maya</option>
+                        <option value="BDO Transfer">BDO Bank Transfer</option>
+                        <option value="Other Bank">Other Bank Transfer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label id="refLabel">Transaction Reference Number <span class="required">*</span></label>
+                    <input type="text" id="refId" placeholder="Input the 13-digit GCash Reference or Bank ID" required>
+                    <span id="refError" class="validation-msg error" style="display:none;">Invalid format. Please check
+                        your receipt.</span>
+                </div>
+
+                <div class="form-group">
+                    <label>Account Name (Sender) <span class="required">*</span></label>
+                    <input type="text" id="senderName" placeholder="Exact name on the receipt" required>
+                </div>
+
+                <button type="button" id="submitBtn" class="btn-submit" disabled>
+                    Finalize & Complete Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/src/scripts/book-your-trip-confirm.js"></script>
+</body>
+
+</html>

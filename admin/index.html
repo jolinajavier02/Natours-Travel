@@ -1,9 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta http-equiv="refresh" content="0; url=portal/">
-    <script>window.location.href = "portal/";</script>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=/public/pages/admin/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Admin...</title>
+    <script>
+        const target = '/public/pages/admin/' + window.location.search + window.location.hash;
+        window.location.replace(target);
+    </script>
 </head>
+
+<body>
+    <p>Redirecting to <a href="/public/pages/admin/">Admin</a>...</p>
+</body>
 
 </html>

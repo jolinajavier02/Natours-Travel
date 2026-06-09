@@ -1,6 +1,8 @@
 // Navbar Scroll Effect
 window.addEventListener('scroll', function () {
     const header = document.querySelector('.header');
+    if (!header) return;
+
     if (window.scrollY > 50) {
         header.classList.add('scrolled');
     } else {
@@ -15,7 +17,9 @@ const navMenu = document.querySelector('.nav-menu');
 if (hamburger) {
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
+        if (navMenu) {
+            navMenu.classList.toggle('active');
+        }
     });
 }
 

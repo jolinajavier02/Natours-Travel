@@ -111,13 +111,13 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(() => {
                 alert('✅ Success! Your booking and payment reference have been submitted for verification. Please check your email for the confirmation voucher.');
                 sessionStorage.removeItem('bookingData');
-                window.location.href = '../home/';
+                window.location.href = '/home';
             })
             .catch(err => {
                 console.error('Email failed:', err);
                 // Even if email fails, it's saved in the admin portal
                 alert('Booking record saved! (Note: Email confirmation is delayed, but our team can see your record in the admin portal).');
-                window.location.href = '../home/';
+                window.location.href = '/home';
             });
     });
 

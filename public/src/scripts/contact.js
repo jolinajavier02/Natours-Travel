@@ -31,21 +31,11 @@ function smoothScroll() {
     });
 }
 
-function performSearch() {
-    const searchInput = document.querySelector('.search-input');
-    const query = searchInput.value.trim();
-
-    if (query) {
-        // Redirect to recipes page with search query
-        window.location.href = `src/pages/recipes?search=${encodeURIComponent(query)}`;
-    }
-}
-
-images.forEach(img => imageObserver.observe(img));
-
 // Add scroll effect to header
 window.addEventListener('scroll', function () {
     const header = document.querySelector('.header');
+    if (!header) return;
+
     if (window.scrollY > 100) {
         header.classList.add('scrolled');
     } else {
